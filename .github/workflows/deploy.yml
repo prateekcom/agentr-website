@@ -1,0 +1,61 @@
+---
+name: Deploy Landing Site to CloudFront
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      BUCKET: agentr-prod-landing-page
+      REGION: ap-south-1
+      DIST_ID: E1PMBXZHPFWUET            # d3vqb912otkjbx.cloudfront.net
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.REGION }}
+
+    # No build step: the site is plain HTML, CSS and JS, committed as it ships.
+    - name: Copy files to the bucket with the AWS CLI
+      run: |
+        aws s3 sync . s3://${{ env.BUCKET }} --delete \
+          --exclude ".git/*" \
+          --exclude ".github/*" \
+          --exclude ".claude/*" \
+          --exclude ".gitignore" \
+          --exclude ".DS_Store"
+
+    # Every page is a separate index.html, so this cannot target one file the way
+    # the React deploy does. Pages must never be cached or a deploy is invisible
+    # to anyone who visited before it.
+    - name: Stop the HTML being cached
+      run: |
+        aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
+          --exclude "*" --include "*.html" \
+          --metadata-directive REPLACE \
+          --content-type "text/html; charset=utf-8" \
+          --cache-control "no-store, no-cache, must-revalidate, max-age=0"
+
+    # Images and icons are content-stable and never renamed in place.
+    - name: Cache the images hard
+      run: |
+        aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
+          --exclude "*" --include "*.png" --include "*.ico" \
+          --metadata-directive REPLACE \
+          --cache-control "public, max-age=31536000, immutable"
+
+    - name: Invalidate Cloudfront Cache
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id ${{ env.DIST_ID }} \
+          --paths "/*"
