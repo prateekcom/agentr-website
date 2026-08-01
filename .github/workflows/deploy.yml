@@ -36,22 +36,29 @@ jobs:
           --exclude ".DS_Store"
 
     # Every page is a separate index.html, so this cannot target one file the way
-    # the React deploy does. Pages must never be cached or a deploy is invisible
-    # to anyone who visited before it.
-    - name: Stop the HTML being cached
+    # the React deploy does.
+    # s-maxage lets CloudFront hold the page indefinitely while max-age=0 keeps
+    # the browser revalidating, so a repeat visitor still gets the new build.
+    # Staleness after a deploy is handled by the invalidation at the end of this
+    # job, not by refusing to cache: no-store meant every request travelled to
+    # ap-south-1 and the CDN did nothing for HTML at all.
+    - name: Set HTML caching
       run: |
         aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
           --exclude "*" --include "*.html" \
           --metadata-directive REPLACE \
           --content-type "text/html; charset=utf-8" \
-          --cache-control "no-store, no-cache, must-revalidate, max-age=0"
+          --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
 
     # CloudFront's S3 REST origin has no index-document concept: a request for
     # /smarter-screening/ asks for a key literally named "smarter-screening/",
     # which does not exist, so the origin 403s and the distribution's error
     # response serves the landing page instead. S3 does allow a key ending in a
     # slash, so write every page to that key as well and directory URLs resolve
-    # at the origin. The root needs no copy: it is the default root object.
+    # at the origin. The bare key is written too, or /smarter-screening without
+    # the slash falls through to the error response and serves the landing page.
+    # Both forms carry the page's canonical tag, so search engines consolidate
+    # them. The root needs no copy: it is the default root object.
     # A CloudFront Function rewriting the URI would be the tidier fix, but this
     # keeps the whole thing inside the deploy.
     - name: Publish directory URLs
@@ -60,12 +67,14 @@ jobs:
           key="${f#./}"
           dir="${key%index.html}"
           if [ -n "$dir" ]; then
-            aws s3api put-object \
-              --bucket "${{ env.BUCKET }}" \
-              --key "$dir" \
-              --body "$f" \
-              --content-type "text/html; charset=utf-8" \
-              --cache-control "no-store, no-cache, must-revalidate, max-age=0"
+            for k in "$dir" "${dir%/}"; do
+              aws s3api put-object \
+                --bucket "${{ env.BUCKET }}" \
+                --key "$k" \
+                --body "$f" \
+                --content-type "text/html; charset=utf-8" \
+                --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
+            done
           fi
         done
 
