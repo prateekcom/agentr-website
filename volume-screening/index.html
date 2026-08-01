@@ -11,26 +11,26 @@
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AgentR for candidates, what happens to your application</title>
-<meta name="description" content="You applied to a company using AgentR. Here is exactly what happens to your application, what is recorded, and what we never do." />
+<title>Screening at volume, without losing the plot</title>
+<meta name="description" content="A tired reviewer scores candidate four hundred differently than candidate two. AgentR applies one rubric to every applicant, so volume stops degrading quality." />
 <link rel="icon" href="../favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
 <link rel="manifest" href="../assets/site.webmanifest" />
 <meta name="theme-color" content="#F5F2EC" />
-<link rel="canonical" href="https://agentr.global/for-candidates/" />
-<meta property="og:url" content="https://agentr.global/for-candidates/" />
+<link rel="canonical" href="https://agentr.global/volume-screening/" />
+<meta property="og:url" content="https://agentr.global/volume-screening/" />
 <meta property="og:site_name" content="AgentR" />
 <meta property="og:locale" content="en" />
 <meta property="og:image" content="https://agentr.global/assets/android-chrome-512x512.png" />
 <meta property="og:image:alt" content="AgentR" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="AgentR for candidates, what happens to your application" />
-<meta property="og:description" content="You applied to a company using AgentR. Here is exactly what happens to your application, what is recorded, and what we never do." />
+<meta property="og:title" content="Screening at volume, without losing the plot" />
+<meta property="og:description" content="A tired reviewer scores candidate four hundred differently than candidate two. AgentR applies one rubric to every applicant, so volume stops degrading quality." />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="AgentR for candidates, what happens to your application" />
-<meta name="twitter:description" content="You applied to a company using AgentR. Here is exactly what happens to your application, what is recorded, and what we never do." />
+<meta name="twitter:title" content="Screening at volume, without losing the plot" />
+<meta name="twitter:description" content="A tired reviewer scores candidate four hundred differently than candidate two. AgentR applies one rubric to every applicant, so volume stops degrading quality." />
 <script>
 /* must run before the browser decides to restore scroll on reload. The flag alone
    is not enough in every browser, so assert the position on load too, but only
@@ -67,7 +67,6 @@ addEventListener('pageshow', _top);
           </div>
         </div>
       </div>
-      <a href="../pricing/">Pricing</a>
       <div class="navdrop">
         <button class="navdrop-t" type="button" aria-expanded="false" aria-controls="dd-usecases">
           Use Cases <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1.5 5.5 5.5 10 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -76,11 +75,12 @@ addEventListener('pageshow', _top);
           <div class="dd-grid">
             <a href="../resume-verification/"><span class="dd-n">01</span><span class="dd-x"><b>Resume Verification</b><i>Every claim read in context, not lifted out as a keyword.</i></span></a>
             <a href="../ai-cheating-prevention/"><span class="dd-n">02</span><span class="dd-x"><b>AI Cheating Prevention</b><i>Built for the copilot era: divided attention, novel questions.</i></span></a>
-            <a href="../volume-screening/"><span class="dd-n">03</span><span class="dd-x"><b>Volume Screening</b><i>The same rubric for applicant one and applicant a thousand.</i></span></a>
+            <a href="../volume-screening/" aria-current="page"><span class="dd-n">03</span><span class="dd-x"><b>Volume Screening</b><i>The same rubric for applicant one and applicant a thousand.</i></span></a>
             <a href="../pre-bgv-filter/"><span class="dd-n">04</span><span class="dd-x"><b>Pre-BGV Filter</b><i>A consistency check before formal verification spend.</i></span></a>
           </div>
         </div>
       </div>
+      <a href="../pricing/">Pricing</a>
       </div>
       <a href="../#waitlist" class="btn">Join waitlist <span>&#8594;</span></a>
     </div>
@@ -106,139 +106,101 @@ addEventListener('pageshow', _top);
 </div>
 
 <main>
-<header class="phead wrap">
-  <span class="kicker">you applied. now what?</span>
-  <h1>What happens to <span class="serif">your application.</span></h1>
-  <p class="lede">A company you applied to uses AgentR. You did not choose us, so the least we owe
-    you is a plain account of what we do with what you sent, and what we never do.</p>
+<header class="phead wrap split">
+  <div class="htext">
+    <span class="kicker">use case &middot; volume screening</span>
+    <h1>Applicant two matters as much <span class="serif">as applicant four hundred.</span></h1>
+    <p class="lede">At real volume, a tired reviewer scores the same resume differently on a
+      Friday afternoon than a Monday morning. AgentR applies one rubric to every applicant, so the
+      thousandth gets read as carefully as the first.</p>
+    <ul class="claims">
+      <li>The same nineteen data points, scored the same way, for every single applicant.</li>
+      <li>A confident top ten out of a thousand &mdash; not a claim to rank the definitive best.</li>
+      <li>Nobody is rejected by a machine.</li>
+    </ul>
+  </div>
+  <div class="hvis">
+    <div class="hvis-card">
+      <span class="hvis-tape" aria-hidden="true"></span>
+      <span class="hvis-kicker">the pile &middot; live</span>
+      <div class="hvis-row">
+        <div><span class="hvis-label">Applied this week</span>
+          <span class="hvis-sub">Same rubric from application one</span></div>
+        <span class="hvis-count">1,247</span>
+      </div>
+      <div class="hvis-row">
+        <div><span class="hvis-label">Qualified for interview</span>
+          <span class="hvis-sub">Cleared your bar, automatically</span></div>
+        <span class="hvis-count">86</span>
+      </div>
+      <div class="hvis-row">
+        <div><span class="hvis-label">Shortlisted</span>
+          <span class="hvis-sub">A confident top group, ranked</span></div>
+        <span class="hvis-count">10</span>
+      </div>
+    </div>
+  </div>
 </header>
 
 <section class="wrap band" style="padding-top:0">
   <div class="metrics">
-    <div class="metric"><b>0</b><span>applications rejected by software</span></div>
-    <div class="metric"><b>14 hr</b><span>to take the interview, whenever suits you</span></div>
-    <div class="metric"><b>0</b><span>criteria written after you answered</span></div>
+    <div class="metric"><b>19</b><span>data points scored per candidate</span></div>
+    <div class="metric"><b>5</b><span>evaluation chapters, the same order every time</span></div>
+    <div class="metric"><b>Top 10</b><span>a confident shortlist, from a thousand or more</span></div>
   </div>
-  <p class="metrics-note">how the system behaves, not a promise about any one employer</p>
+  <p class="metrics-note">how the system behaves, not a benchmark</p>
+</section>
 
-  <div class="signin">
-    <div>
-      <h3>Already applied?</h3>
-      <p>Your interview link, the questions you were asked and the state of your application all
-        live in the candidate portal.</p>
-    </div>
-    <a class="btn" href="https://candidate.agentr.global/" target="_blank" rel="noopener">Sign in &#8594;</a>
+<section class="wrap band">
+  <h2 class="sec">Screening at volume is <span class="serif">not the same as screening well.</span></h2>
+  <p class="lead">Manual review gets less careful as the pile grows. A fixed rubric, applied by
+    machine, does not get tired at candidate four hundred the way a person does.</p>
+  <div class="grid-2">
+    <div class="card"><h3>The same rubric, every candidate</h3>
+      <p>Core alignment, skills and competency, career trajectory, risk assessment, logistics
+        &mdash; the same five chapters, scored in the same order, with no reviewer-fatigue
+        effect.</p></div>
+    <div class="card"><h3>A confident shortlist, not a definitive ranking</h3>
+      <p>Taking a thousand applicants down to a confident top ten is what this does well. Picking
+        the single definitive best out of that ten is a different claim, and not one we make.</p></div>
   </div>
 </section>
 
 <section class="wrap band">
-  <h2 class="sec">The short version</h2>
-  <ul class="ruled">
-    <li><b>01</b><div><span class="t">Your application is read in full</span>
-      <p>Not skimmed, not keyword matched, and not discarded because it arrived on a Friday. Every
-        application is read against the criteria the employer wrote down for that role.</p></div></li>
-    <li><b>02</b><div><span class="t">Nothing is auto-rejected</span>
-      <p>AgentR orders the pile. It never trims it. No software here says no to you. A person at the
-        company decides that, the same as always.</p></div></li>
-    <li><b>03</b><div><span class="t">Your claims may be checked against public sources</span>
-      <p>Big claims get weighed against what is publicly known about the company and the role you
-        describe. Each one gets a verdict and the sources behind it, so a recruiter sees the
-        reasoning rather than a hunch.</p></div></li>
-    <li><b>04</b><div><span class="t">If you are interviewed, the bar was set before you applied</span>
-      <p>The questions come from the role and the scoring criteria were written in advance, so you
-        are judged against the job rather than against whoever went before you. It is recorded so
-        your answers can be reviewed properly instead of remembered vaguely.</p></div></li>
+  <h2 class="sec">What happens to <span class="serif">the pile.</span></h2>
+  <ul class="ruled lbl">
+    <li><b>applied</b><div><span class="t">Every application enters the same pipeline</span>
+      <p>No manual triage queue forms before the read even starts, whether it is the tenth
+        application or the thousandth.</p></div></li>
+    <li><b>auto-screened</b><div><span class="t">Scored against your criteria, the same way for everyone</span>
+      <p>The nineteen data points, five chapters, every time &mdash; the rubric does not drift as
+        the day wears on.</p></div></li>
+    <li><b>qualified</b><div><span class="t">Above your bar, routed to interview automatically</span>
+      <p>The threshold is yours to set. The routing is automatic once it is set, so nothing waits
+        on a person to notice.</p></div></li>
+    <li><b>shortlisted</b><div><span class="t">Ranked within the qualifying group</span>
+      <p>A confident top ten, not a claim to the definitive single best.</p></div></li>
   </ul>
 </section>
 
 <section class="wrap band">
-  <h2 class="sec">About the <span class="serif">recorded interview.</span></h2>
-  <p class="lead">You will be told before anything is recorded, and you can stop at any point. Here
-    is what is actually captured.</p>
-  <div class="grid-2">
-    <div class="card">
-      <h3>What is recorded</h3>
-      <p>Your camera and audio for the duration of the interview, your answers as a transcript, and
-        scores against the rubric written for that role.</p>
-    </div>
-    <div class="card">
-      <h3>What the camera watches for</h3>
-      <p>Another face in frame, no face at all, a phone or second screen visible, gaze and framing
-        drifting, the tab losing focus. These are notes for a human reviewer. They are advisory and
-        never change your score.</p>
-    </div>
-    <div class="card">
-      <h3>If the role uses AgentR Guard</h3>
-      <p>Some employers require a small macOS app during the interview. It looks for screen-capture
-        tools and windows that hide themselves from capture, which is how invisible answer helpers
-        work. It can pause the interview room until the issue clears.</p>
-    </div>
-  </div>
-</section>
-
-<section class="wrap band">
-  <h2 class="sec">What it <span class="serif">never does.</span></h2>
+  <h2 class="sec">What it <span class="serif">will not do.</span></h2>
   <ul class="claims no">
-    <li>It never rejects you. A person at the company makes that call, and a paused interview room
-      is not a rejection.</li>
-    <li>It never lets a proctoring flag move your score. Flags are notes for a human to look at.</li>
-    <li>It never scores you on your contact details. Your email address and phone number are
-      removed before your application is read.</li>
-    <li>It never scores you against a standard invented after it read your answer.</li>
+    <li>It will not claim to identify the single best candidate. Only a confident, consistent shortlist.</li>
+    <li>It will not score against vague or unstructured criteria. Loose free-text requirements get flagged for clarification before ranking begins.</li>
+    <li>It will not let bucket assignment and ranking bleed into each other. They are independent, so one bad ranking signal cannot quietly change who qualifies.</li>
+    <li>It will not auto-reject. Qualifying logic determines interview routing, not final hiring decisions.</li>
   </ul>
 </section>
-
 <section class="wrap band">
-  <h2 class="sec">Common <span class="serif">questions.</span></h2>
-  <div class="faq">
-    <details><summary>Will a person actually look at my application?</summary>
-      <div class="a">Yes. Nothing is rejected automatically, at any score. AgentR puts the
-        applications in an order and shows the reasoning. Every decision after that is a person's.</div></details>
-    <details><summary>What if my connection drops during the interview?</summary>
-      <div class="a">Your link is not used up when you open it. Close the tab, lose the wifi, come
-        back and carry on. The recording picks up in a new piece rather than being lost.</div></details>
-    <details><summary>What if I run out of time on a question?</summary>
-      <div class="a">A question you never reached is not marked as a failure. It counts as
-        inconclusive, and what you actually wrote and said carries the weight instead.</div></details>
-    <details><summary>Do I have to install anything?</summary>
-      <div class="a">Only if that employer has turned on AgentR Guard, and you will be told before
-        you start. Otherwise the interview runs in your browser.</div></details>
-    <details><summary>Is there any point tailoring my resume for the AI?</summary>
-      <div class="a">Not really. Hidden text aimed at the model is stripped out before scoring, and
-        kept on record. A skill that only appears in a list counts for nothing; what counts is work
-        you can show you did.</div></details>
-  </div>
-</section>
-
-<section class="wrap band">
-  <h2 class="sec">Your <span class="serif">rights.</span></h2>
-  <div class="prose">
-    <p>The company you applied to is the data controller for your application. AgentR processes it
-      on their behalf. That means requests about your data are strongest when made to them, but we
-      will always help.</p>
-    <ul>
-      <li><strong>Access</strong> a copy of what we hold about your application.</li>
-      <li><strong>Correction</strong> of anything inaccurate.</li>
-      <li><strong>Deletion</strong>, subject to the employer's own retention obligations.</li>
-      <li><strong>An explanation</strong> of any assessment, including the evidence behind it.</li>
-      <li><strong>A human review</strong> of anything a machine contributed to.</li>
-    </ul>
-    <p>Write to <a href="mailto:legal.vibencode@gmail.com">legal.vibencode@gmail.com</a> and tell us
-      the role and the company.</p>
-  </div>
-
-  <div class="grid-2">
-    <a class="card" href="../candidate-privacy/">
-      <h3>AI transparency notice</h3>
-      <p>The full account of how an evaluation is produced: what is looked at, how a recommendation
-        is generated, what AI is never used for, and how to ask for a human review.</p></a>
-    <a class="card" href="../privacy-policy/">
-      <h3>Privacy notice</h3>
-      <p>What is collected, why, who it is shared with, how long it is kept, and the rights you have
-        over it.</p></a>
+  <div class="quote-card">
+    <p>&ldquo;The detailed, evaluation-backed rankings bring a new layer of trust to every
+      hiring decision, something traditional ATSs often miss.&rdquo;</p>
+    <p class="who">Kusum Rajput &middot; Human Resource Associate</p>
   </div>
 </section>
 </main>
+
 <footer>
   <div class="wrap">
     <div class="foot-grid">

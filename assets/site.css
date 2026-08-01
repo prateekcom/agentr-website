@@ -47,7 +47,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav);
 .btn:hover{background:var(--accent-deep);box-shadow:0 8px 22px rgba(84,56,204,.3)}
 .btn.ghost{background:none;color:var(--accent);border:1px solid var(--line)}
 .btn.ghost:hover{background:var(--accent-tint);box-shadow:none}
-@media(max-width:900px){.nav-links a:not(.btn){display:none}}
+
+/* mobile nav v2: the nested accordion (burger panel containing collapsible
+   dropdowns) fought itself — inconsistent collapse behaviour, overlap on
+   expand. Replaced with one flat full-screen menu: category labels, links
+   already expanded underneath, no nested toggles to go wrong. .nav-extra
+   stays in the markup (harmless, invisible via display:contents) so the
+   desktop dropdowns it wraps are untouched; mobile ignores it entirely and
+   uses .mobile-menu instead. */
+.nav-extra{display:contents}
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:34px;height:34px;background:none;border:none;cursor:pointer;padding:0;
+  flex-shrink:0}
+.nav-burger span{display:block;height:2px;background:var(--text);border-radius:2px;
+  transition:transform .25s,opacity .25s}
+.nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none}
+@media(max-width:900px){
+  .nav-burger{display:flex}
+  .nav-links > a:not(.btn),.nav-links > .nav-extra{display:none}
+  .nav-links .btn{display:none}
+  .mobile-menu{display:none;position:fixed;top:var(--nav);left:0;right:0;bottom:0;
+    z-index:99;background:var(--paper);overflow-y:auto;
+    padding:2px clamp(20px,5vw,44px) 36px}
+  .mobile-menu.open{display:block}
+  .mm-group{padding:13px 0;border-bottom:1px solid var(--line)}
+  .mm-group b{display:block;font-family:'DM Mono',ui-monospace,monospace;font-size:11px;
+    letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  /* titles only on mobile — the taglines are worth the space in the desktop
+     mega-menu, where you arrive by hover with room to spare; here they turned
+     a "get to a page fast" list into a long scroll before reaching Pricing.
+     A brass index number stands in for the dropped tagline, echoing .dd-n. */
+  .mm-group a{display:flex;align-items:baseline;gap:13px;padding:11px 0;font-size:15.5px;
+    font-weight:700;letter-spacing:-.01em;color:var(--text)}
+  .mm-group a i{display:none}
+  .mm-n{flex-shrink:0;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;
+    color:var(--brass-deep)}
+  /* folded into the same list rhythm as the grouped links, just muted and
+     un-numbered, so it reads as this menu's last stop rather than a stray group */
+  .mm-link{display:block;padding:11px 0 13px;font-size:15px;font-weight:600;color:var(--muted)}
+  .mobile-menu .btn{display:flex;width:100%;justify-content:center;margin-top:20px}
+}
 
 /* ---------------- page head ---------------- */
 .phead{padding-block:calc(var(--nav) + clamp(50px,8vh,92px)) clamp(30px,5vh,52px)}
@@ -132,6 +174,8 @@ h3.sub{font-size:19px;font-weight:800;letter-spacing:-.01em}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
 .card .ic{width:44px;height:44px;border-radius:12px;background:var(--accent-tint);
   display:grid;place-items:center;margin-bottom:18px;color:var(--accent-deep)}
+.card .tag{display:block;font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;
+  color:var(--brass-deep);margin-bottom:10px}
 .card h3{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .card p{color:var(--muted);font-size:14.5px;line-height:1.6;margin-top:8px}
 
@@ -304,7 +348,6 @@ footer{border-top:1px solid var(--line);margin-top:clamp(56px,8vh,96px);backgrou
 .dd-grid a:hover .dd-n{background:var(--accent);color:#fff}
 .dd-x b{display:block;font-size:15.5px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
 .dd-x i{display:block;font-style:normal;margin-top:3px;font-size:13px;line-height:1.5;color:var(--muted)}
-@media(max-width:900px){.navdrop{display:none}}
 
 /* ---------------- process pages ---------------- */
 /* the rules run the full column, like .ruled does. Capped at 60ch they stopped
@@ -368,6 +411,61 @@ h3.sub2{font-size:21px;font-weight:800;letter-spacing:-.02em;margin-top:clamp(38
 a.card{display:block;color:inherit}
 a.card h3{color:var(--text)}
 a.card:hover h3{color:var(--accent)}
+
+/* a placeholder frame for a photo not yet in the repo, sized to 70% of the
+   row's measure. The caption lives outside the frame on purpose: drop a real
+   <img> into .photoframe-ph later and the caption underneath still reads
+   correctly, instead of vanishing with the placeholder it was written on. */
+.photoframe{width:70%;margin:14px 0 18px}
+.photoframe-ph{background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow-sm);aspect-ratio:16/9;display:grid;place-items:center;overflow:hidden}
+.photoframe-ph span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.55}
+.photoframe img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:18px}
+.photoframe figcaption{margin-top:9px;font-family:'Caveat',cursive;font-weight:600;font-size:17px;
+  color:var(--brass-deep);transform:rotate(-1deg);display:inline-block}
+
+/* ---------------- use-case hero split ---------------- */
+/* text left, a small illustrated "verdict card" right — the same claim/signal
+   check the rest of the product does, just staged as the hero image instead of
+   asking for a stock photo nothing on this site otherwise uses. */
+.phead.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,360px);
+  gap:clamp(30px,5vw,64px);align-items:center}
+.phead.split .htext{max-width:640px}
+@media(max-width:900px){.phead.split{grid-template-columns:1fr}
+  .phead.split .hvis{order:-1;width:min(340px,86vw);margin:0 auto 6px}}
+
+.hvis{position:relative}
+.hvis-card{position:relative;background:var(--card);border:1px solid var(--line);
+  border-radius:22px;box-shadow:var(--shadow-md);padding:clamp(20px,2.4vw,26px);
+  transform:rotate(-2deg)}
+.hvis-tape{position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(-3deg);
+  width:64px;height:24px;border-radius:2px;background:rgba(168,130,59,.22);
+  border:1px solid rgba(168,130,59,.3)}
+.hvis-kicker{display:block;font-family:'DM Mono',ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.hvis-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.hvis-row + .hvis-row{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.hvis-label{font-size:14.5px;font-weight:700;line-height:1.35}
+.hvis-label.with-ico{display:flex;align-items:center;gap:8px}
+/* a small lettermark rather than a fetched third-party logo — no external
+   request that can 404 later, and no risk of pulling the wrong domain's icon */
+.hvis-ico{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:6px;background:var(--text);color:#fff;
+  font-family:'DM Mono',ui-monospace,monospace;font-size:10px;font-weight:700}
+.hvis-sub{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+/* volume screening's card tells a funnel, not a verdict — a shrinking number
+   reads better here than a pill badge that would just repeat "consistent" */
+.hvis-count{flex-shrink:0;font-family:'Instrument Serif',Georgia,serif;font-style:italic;
+  font-weight:400;font-size:26px;color:var(--accent);line-height:1;margin-top:2px}
+.hvis-badge{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;padding:5px 10px;
+  border-radius:999px;font-family:'DM Mono',ui-monospace,monospace;font-size:10.5px;
+  font-weight:600;white-space:nowrap;margin-top:1px}
+.hvis-badge.ok{background:var(--accent-tint);color:var(--accent-deep)}
+.hvis-badge.flag{background:var(--brass-tint);color:var(--brass-deep)}
+/* a caught-and-stopped tool reads differently from a claim under review: solid
+   ink rather than a tint, so "blocked" feels final next to the softer flags */
+.hvis-badge.blocked{background:var(--text);color:#fff}
 
 /* ---------------- candidate sign-in ---------------- */
 .signin{display:flex;align-items:center;justify-content:space-between;gap:clamp(18px,3vw,40px);

@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MGH3D6JDNG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MGH3D6JDNG');
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>When everyone is using bots, how do you find the humans who matter?</title>
@@ -42,6 +50,10 @@ addEventListener('pageshow', _top);
   <div class="nav-in">
     <a class="logo" href="../../" aria-label="AgentR home"><img class="mark" src="../../agentr-logo.png" alt="AgentR" /></a>
     <div class="nav-links">
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-extra">
       <div class="navdrop">
         <button class="navdrop-t" type="button" aria-expanded="false" aria-controls="dd-process">
           Process <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1.5 5.5 5.5 10 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -56,12 +68,43 @@ addEventListener('pageshow', _top);
         </div>
       </div>
       <a href="../../pricing/">Pricing</a>
-      <a href="../../for-candidates/">For candidates</a>
-      <a href="../../investors/">For investors</a>
+      <div class="navdrop">
+        <button class="navdrop-t" type="button" aria-expanded="false" aria-controls="dd-usecases">
+          Use Cases <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1.5 5.5 5.5 10 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="navdrop-p" id="dd-usecases" role="group" aria-label="Use Cases">
+          <div class="dd-grid">
+            <a href="../../resume-verification/"><span class="dd-n">01</span><span class="dd-x"><b>Resume Verification</b><i>Every claim read in context, not lifted out as a keyword.</i></span></a>
+            <a href="../../ai-cheating-prevention/"><span class="dd-n">02</span><span class="dd-x"><b>AI Cheating Prevention</b><i>Built for the copilot era: divided attention, novel questions.</i></span></a>
+            <a href="../../volume-screening/"><span class="dd-n">03</span><span class="dd-x"><b>Volume Screening</b><i>The same rubric for applicant one and applicant a thousand.</i></span></a>
+            <a href="../../pre-bgv-filter/"><span class="dd-n">04</span><span class="dd-x"><b>Pre-BGV Filter</b><i>A consistency check before formal verification spend.</i></span></a>
+          </div>
+        </div>
+      </div>
+      </div>
       <a href="../../#waitlist" class="btn">Join waitlist <span>&#8594;</span></a>
     </div>
   </div>
 </nav>
+<div class="mobile-menu">
+  <div class="mm-group">
+    <b>process</b>
+    <a href="../../smarter-screening/"><span class="mm-n">01</span>Smarter Screening<i>Read and score every application, not just the top of the pile.</i></a>
+    <a href="../../better-shortlisting/"><span class="mm-n">02</span>Better Shortlisting<i>Rank on twenty signals, with the evidence behind each one.</i></a>
+    <a href="../../faster-scheduling/"><span class="mm-n">03</span>Faster Scheduling<i>No calendars, no slots. One link, good for fourteen hours.</i></a>
+    <a href="../../fairer-interviews/"><span class="mm-n">04</span>Fairer Interviews<i>Questions built from the role, answers scored against a written rubric.</i></a>
+  </div>
+  <div class="mm-group">
+    <b>use cases</b>
+    <a href="../../resume-verification/"><span class="mm-n">01</span>Resume Verification<i>Every claim read in context, not lifted out as a keyword.</i></a>
+    <a href="../../ai-cheating-prevention/"><span class="mm-n">02</span>AI Cheating Prevention<i>Built for the copilot era: divided attention, novel questions.</i></a>
+    <a href="../../volume-screening/"><span class="mm-n">03</span>Volume Screening<i>The same rubric for applicant one and applicant a thousand.</i></a>
+    <a href="../../pre-bgv-filter/"><span class="mm-n">04</span>Pre-BGV Filter<i>A consistency check before formal verification spend.</i></a>
+  </div>
+  <a class="mm-link" href="../../pricing/">Pricing</a>
+  <a class="btn" href="../../#waitlist">Join waitlist <span>&#8594;</span></a>
+</div>
+
 <main>
 <header class="phead wrap">
   <span class="kicker">our views</span>
@@ -188,9 +231,9 @@ addEventListener('pageshow', _top);
         <a href="https://candidate.agentr.global/" target="_blank" rel="noopener">Candidate login</a>
         <a href="../../candidate-privacy/">AI transparency</a></div>
       <div class="foot-col"><b>legal</b>
-        <a href="../../privacy/">Privacy policy</a>
-        <a href="../../terms/">Terms and conditions</a>
-        <a href="../../security/">Platform security</a></div>
+        <a href="../../privacy-policy/">Privacy policy</a>
+        <a href="../../terms-and-conditions/">Terms and conditions</a>
+        <a href="../../platform-security/">Platform security</a></div>
     </div>
     <div class="foot-badges">
       <a href="https://www.producthunt.com/products/agentr/reviews?utm_source=badge-product_review&amp;utm_medium=badge&amp;utm_source=badge-agentr" target="_blank" rel="noopener"><img

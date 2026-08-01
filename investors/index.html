@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MGH3D6JDNG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MGH3D6JDNG');
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AgentR for investors, rebuilding hiring from first principles</title>
-<meta name="description" content="We are not software with some AI features. We are rebuilding hiring from first principles, and this is the case for it." />
+<title>AgentR for investors — not software with some AI features</title>
+<meta name="description" content="We are rebuilding hiring from first principles. Sourcing and workflow got solved years ago. Judgement never did, and every hire still routes through it." />
 <link rel="icon" href="../favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png" />
@@ -18,11 +26,11 @@
 <meta property="og:image" content="https://agentr.global/assets/android-chrome-512x512.png" />
 <meta property="og:image:alt" content="AgentR" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="AgentR for investors, rebuilding hiring from first principles" />
-<meta property="og:description" content="We are not software with some AI features. We are rebuilding hiring from first principles, and this is the case for it." />
+<meta property="og:title" content="AgentR for investors — not software with some AI features" />
+<meta property="og:description" content="We are rebuilding hiring from first principles. Sourcing and workflow got solved years ago. Judgement never did, and every hire still routes through it." />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="AgentR for investors, rebuilding hiring from first principles" />
-<meta name="twitter:description" content="We are not software with some AI features. We are rebuilding hiring from first principles, and this is the case for it." />
+<meta name="twitter:title" content="AgentR for investors — not software with some AI features" />
+<meta name="twitter:description" content="We are rebuilding hiring from first principles. Sourcing and workflow got solved years ago. Judgement never did, and every hire still routes through it." />
 <script>
 /* must run before the browser decides to restore scroll on reload. The flag alone
    is not enough in every browser, so assert the position on load too, but only
@@ -42,6 +50,10 @@ addEventListener('pageshow', _top);
   <div class="nav-in">
     <a class="logo" href="../" aria-label="AgentR home"><img class="mark" src="../agentr-logo.png" alt="AgentR" /></a>
     <div class="nav-links">
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-extra">
       <div class="navdrop">
         <button class="navdrop-t" type="button" aria-expanded="false" aria-controls="dd-process">
           Process <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1.5 5.5 5.5 10 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -56,38 +68,74 @@ addEventListener('pageshow', _top);
         </div>
       </div>
       <a href="../pricing/">Pricing</a>
-      <a href="../for-candidates/">For candidates</a>
-      <a href="../investors/" aria-current="page">For investors</a>
+      <div class="navdrop">
+        <button class="navdrop-t" type="button" aria-expanded="false" aria-controls="dd-usecases">
+          Use Cases <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1.5 5.5 5.5 10 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="navdrop-p" id="dd-usecases" role="group" aria-label="Use Cases">
+          <div class="dd-grid">
+            <a href="../resume-verification/"><span class="dd-n">01</span><span class="dd-x"><b>Resume Verification</b><i>Every claim read in context, not lifted out as a keyword.</i></span></a>
+            <a href="../ai-cheating-prevention/"><span class="dd-n">02</span><span class="dd-x"><b>AI Cheating Prevention</b><i>Built for the copilot era: divided attention, novel questions.</i></span></a>
+            <a href="../volume-screening/"><span class="dd-n">03</span><span class="dd-x"><b>Volume Screening</b><i>The same rubric for applicant one and applicant a thousand.</i></span></a>
+            <a href="../pre-bgv-filter/"><span class="dd-n">04</span><span class="dd-x"><b>Pre-BGV Filter</b><i>A consistency check before formal verification spend.</i></span></a>
+          </div>
+        </div>
+      </div>
+      </div>
       <a href="../#waitlist" class="btn">Join waitlist <span>&#8594;</span></a>
     </div>
   </div>
 </nav>
+<div class="mobile-menu">
+  <div class="mm-group">
+    <b>process</b>
+    <a href="../smarter-screening/"><span class="mm-n">01</span>Smarter Screening<i>Read and score every application, not just the top of the pile.</i></a>
+    <a href="../better-shortlisting/"><span class="mm-n">02</span>Better Shortlisting<i>Rank on twenty signals, with the evidence behind each one.</i></a>
+    <a href="../faster-scheduling/"><span class="mm-n">03</span>Faster Scheduling<i>No calendars, no slots. One link, good for fourteen hours.</i></a>
+    <a href="../fairer-interviews/"><span class="mm-n">04</span>Fairer Interviews<i>Questions built from the role, answers scored against a written rubric.</i></a>
+  </div>
+  <div class="mm-group">
+    <b>use cases</b>
+    <a href="../resume-verification/"><span class="mm-n">01</span>Resume Verification<i>Every claim read in context, not lifted out as a keyword.</i></a>
+    <a href="../ai-cheating-prevention/"><span class="mm-n">02</span>AI Cheating Prevention<i>Built for the copilot era: divided attention, novel questions.</i></a>
+    <a href="../volume-screening/"><span class="mm-n">03</span>Volume Screening<i>The same rubric for applicant one and applicant a thousand.</i></a>
+    <a href="../pre-bgv-filter/"><span class="mm-n">04</span>Pre-BGV Filter<i>A consistency check before formal verification spend.</i></a>
+  </div>
+  <a class="mm-link" href="../pricing/">Pricing</a>
+  <a class="btn" href="../#waitlist">Join waitlist <span>&#8594;</span></a>
+</div>
+
 <main>
 <header class="phead wrap">
   <span class="kicker">for investors</span>
   <h1>Not software with <span class="serif">some AI features.</span></h1>
-  <p class="lede">We are rebuilding hiring from first principles. The resume stopped being a
-    signal, and every tool in the category is still ranking them faster.</p>
+  <p class="lede">We are rebuilding hiring from first principles. Sourcing and workflow got solved
+    years ago. Judgement never did, and every hire still routes through it.</p>
   <ul class="claims">
     <li>The bottleneck moved from reading applications to trusting them.</li>
-    <li>We built the verification layer, not another ranking layer.</li>
-    <li>Three markets want the same product for three different reasons.</li>
+    <li>We are building the Hirer Intelligence Layer, not another ranking layer.</li>
+    <li>Funded from inside for fifteen months. This is the first money we have asked anyone for.</li>
   </ul>
 </header>
 
 <section class="wrap band" style="padding-top:0">
   <h2 class="sec">Why <span class="serif">now.</span></h2>
   <ul class="ruled lbl">
-    <li><b>the signal</b><div><span class="t">Anyone can write a senior-sounding career in nine seconds</span>
+    <li><b>the signal</b><div><span class="t">Anyone can write a senior-sounding career in an afternoon</span>
       <p>A language model can make any resume read like the right one. It cannot invent an outcome
         that never happened. Every screening tool built before 2023 assumes the document is evidence.
         It is now a draft.</p></div></li>
     <li><b>the tooling</b><div><span class="t">Applicant tracking rewards the people who studied the filter</span>
       <p>Keyword matching hands the shortlist to whoever read a blog post about resume optimisation,
         not to whoever did the work. Faster ranking of the same bad signal does not fix this.</p></div></li>
-    <li><b>the answer</b><div><span class="t">Read everything, then check what it claims</span>
-      <p>Reading is cheap now. Verification is the scarce thing, and it is the part nobody shipped.
-        That is the layer we built, and it is the reason the product is defensible.</p></div></li>
+    <li><b>the asymmetry</b><div><span class="t">AI armed one side of the table</span>
+      <p>Resumes are written by models. Applications arrive in volumes no team can read. Cluely sits
+        in live interviews, feeding answers through an overlay the interviewer cannot see. All of it
+        is cheap and instant now. Nothing on the hiring side was built for any of it.</p></div></li>
+    <li><b>the answer</b><div><span class="t">Read everything, check what it claims, then form a view</span>
+      <p>Reading is cheap now, which is why fifty tools do it. Forming a view you can defend, with
+        the evidence attached, is the part the stack never had. That is the layer we are
+        building.</p></div></li>
   </ul>
 </section>
 
@@ -100,7 +148,8 @@ addEventListener('pageshow', _top);
         injection removed and retained. Nothing is filtered out before a human sees it.</p></div>
     <div class="card"><h3>Claims checked against the public record</h3>
       <p>Roles and achievements are searched against public sources and returned with one of six
-        verdicts and the reasoning behind each. This is the piece competitors do not have.</p></div>
+        verdicts and the reasoning behind each. This is inference from evidence, not a formal
+        background check, and we say the same thing to buyers.</p></div>
     <div class="card"><h3>Structured interviews at the bar you set</h3>
       <p>Built from the role, scored against a rubric written in advance, taken on the
         candidate&rsquo;s own time. No calendars, no interviewer in the room.</p></div>
@@ -108,28 +157,60 @@ addEventListener('pageshow', _top);
       <p>Browser signals are advisory. A native macOS Guard can hold the room shut. Neither ever
         moves a score, and nothing auto-rejects. We would rather say that than imply certainty.</p></div>
   </div>
+  <p class="lead" style="margin-top:24px">Four inputs. One read. Every score opens into the evidence
+    behind it.</p>
 </section>
 
 <section class="wrap band">
-  <h2 class="sec">Three markets, <span class="serif">one product.</span></h2>
-  <p class="lead">The same system sells three different ways, which is what makes the wedge
-    workable rather than scattered.</p>
-  <div class="grid-3">
-    <div class="card"><h3>India: volume</h3>
-      <p>Two hundred applicants for one seat is normal. The pitch is that nobody gets skimmed and
-        nobody gets auto-rejected, at any volume.</p></div>
-    <div class="card"><h3>The West: fit</h3>
-      <p>Smaller piles, higher cost per bad hire. The pitch is evidence: every rank opens into the
-        line of the resume that earned it.</p></div>
-    <div class="card"><h3>The Middle East: verification</h3>
-      <p>Credential checking is a standing requirement, not a nice-to-have. The claim check is the
-        product, and it already exists.</p></div>
+  <h2 class="sec">How we got <span class="serif">here.</span></h2>
+  <p class="lead">Slower than a funded company, and pointed somewhere specific. Everything below has
+    already happened. Where it goes is further out. The hirer&rsquo;s instrument today. The trust
+    layer both sides route through when the agents take over.</p>
+  <ul class="ruled lbl">
+    <li><b>origin</b><div><span class="t">Built for our own hiring first</span>
+      <p>Two hundred resumes for one engineering role. Half claimed the same achievement, two could
+        prove it. We were reading every one by hand, losing weekends to it, and still getting it
+        wrong. AgentR was the thing we needed and could not buy.</p></div></li>
+    <li><b>2025</b><div><span class="t">Shipped twice</span>
+      <p>v1 in April, v2 in July. Two Product Hunt launches, both well received. Every feature
+        answered a problem we had that week.</p></div></li>
+    <li><b>10,000+</b><div><span class="t">Applications, in production</span>
+      <p>Run through our own hiring. Fifteen months of a real company depending on it, which is the
+        difference between a product and a demo.</p></div></li>
+    <li><b>funded</b><div><span class="t">From our own work</span>
+      <p>Client services revenue and years building AI systems paid for every line of this, start to finish.</p></div></li>
+    <li><b>Feb 2026</b><div><span class="t">We took the theories to the market</span>
+      <figure class="photoframe">
+        <div class="photoframe-ph"><span>photo</span></div>
+        <figcaption>India AI Impact Summit, 2026</figcaption>
+      </figure>
+      <p>Three days at this booth, testing whether any of it held up outside our own building.
+        Almost every HR leader who stopped told us the same thing, unprompted: their hiring is
+        failing and they know it. Nobody argued with the problem.</p></div></li>
+    <li><b>Jul 2026</b><div><span class="t">Phase 3, shipped</span>
+      <p>The largest update we have built, drawn almost entirely from what the summit told us.</p></div></li>
+  </ul>
+</section>
+
+<section class="wrap band">
+  <h2 class="sec">What the round <span class="serif">is for.</span></h2>
+  <div class="prose">
+    <p>We have not sold this yet. That was the sequence: build it, live on it, then go. A pre-seed
+      cheque and twelve months, with one job &mdash; scaled-up GTM, the one thing our bootstrapped
+      revenue was never going to fund. We are not raising to keep the lights on. We are raising to
+      stop being slow.</p>
   </div>
 </section>
 
 <section class="wrap band">
   <h2 class="sec">Our <span class="serif">views.</span></h2>
   <p class="lead">The arguments behind the product, at length.</p>
+  <div class="prose" style="margin-bottom:8px">
+    <p>The one we get asked most: why a foundation model company does not simply build this. Labs
+      absorb thin products, single capabilities dressed as companies. This is not one, and no lab
+      is in the room when a hire is made.</p>
+    <p>Every release they ship makes this layer better. None makes it unnecessary.</p>
+  </div>
   <a class="viewcard" href="../views/when-everyone-is-using-bots/">
     <img src="../assets/banner-img.png" alt="" width="2000" height="1125" loading="lazy" />
     <div class="vc-body">
@@ -142,17 +223,17 @@ addEventListener('pageshow', _top);
   </a>
 </section>
 
-<section class="wrap band">
+<section class="wrap band" id="deck">
   <div class="deck">
     <div>
       <span class="kicker">the deck</span>
       <h2 class="sec">Read the <span class="serif">whole case.</span></h2>
-      <p class="lead">Market, wedge, product, and where the money goes. Fifteen slides.</p>
+      <p class="lead">This page is the argument. The deck is the arithmetic. Market sizing, burn,
+        the ask, and the twelve-month plan.</p>
     </div>
     <div class="deck-act">
       <a class="btn" href="../agentr-deck.pdf" download>Download the deck &#8594;</a>
-      <a class="btn ghost" href="mailto:legal.vibencode@gmail.com?subject=AgentR%20investors">Email us</a>
-      <p class="metrics-note">or write to legal.vibencode@gmail.com</p>
+      <a class="btn ghost" href="mailto:prateek@agentr.global?subject=AgentR%20investors">Email us</a>
     </div>
   </div>
   <div class="draftnote" style="margin-top:26px"><b>Needs the file.</b> The button points at
@@ -177,9 +258,9 @@ addEventListener('pageshow', _top);
         <a href="https://candidate.agentr.global/" target="_blank" rel="noopener">Candidate login</a>
         <a href="../candidate-privacy/">AI transparency</a></div>
       <div class="foot-col"><b>legal</b>
-        <a href="../privacy/">Privacy policy</a>
-        <a href="../terms/">Terms and conditions</a>
-        <a href="../security/">Platform security</a></div>
+        <a href="../privacy-policy/">Privacy policy</a>
+        <a href="../terms-and-conditions/">Terms and conditions</a>
+        <a href="../platform-security/">Platform security</a></div>
     </div>
     <div class="foot-badges">
       <a href="https://www.producthunt.com/products/agentr/reviews?utm_source=badge-product_review&amp;utm_medium=badge&amp;utm_source=badge-agentr" target="_blank" rel="noopener"><img

@@ -10,6 +10,25 @@ document.querySelectorAll('.navdrop').forEach(function(dd){
   addEventListener('keydown',function(e){ if(e.key==='Escape') set(false); });
 });
 
+/* mobile menu: a flat, always-expanded full-screen panel behind a burger
+   button (see .mobile-menu in site.css) — no nested accordions to fight */
+(function(){
+  var burger = document.querySelector('.nav-burger');
+  var menu = document.querySelector('.mobile-menu');
+  if(!burger || !menu) return;
+  function setOpen(on){
+    menu.classList.toggle('open',on);
+    burger.classList.toggle('open',on);
+    burger.setAttribute('aria-expanded',on);
+    document.documentElement.style.overflow = on ? 'hidden' : '';
+  }
+  burger.addEventListener('click',function(){ setOpen(!menu.classList.contains('open')); });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){ setOpen(false); });
+  });
+  addEventListener('keydown',function(e){ if(e.key==='Escape') setOpen(false); });
+})();
+
 /* legal pages: the contents follows where you are in the document */
 (function(){
   var toc = document.querySelector('.doc-split .toc');
