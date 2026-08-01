@@ -46,6 +46,29 @@ jobs:
           --content-type "text/html; charset=utf-8" \
           --cache-control "no-store, no-cache, must-revalidate, max-age=0"
 
+    # CloudFront's S3 REST origin has no index-document concept: a request for
+    # /smarter-screening/ asks for a key literally named "smarter-screening/",
+    # which does not exist, so the origin 403s and the distribution's error
+    # response serves the landing page instead. S3 does allow a key ending in a
+    # slash, so write every page to that key as well and directory URLs resolve
+    # at the origin. The root needs no copy: it is the default root object.
+    # A CloudFront Function rewriting the URI would be the tidier fix, but this
+    # keeps the whole thing inside the deploy.
+    - name: Publish directory URLs
+      run: |
+        find . -name index.html -not -path "./.git/*" -not -path "./.github/*" | while read -r f; do
+          key="${f#./}"
+          dir="${key%index.html}"
+          if [ -n "$dir" ]; then
+            aws s3api put-object \
+              --bucket "${{ env.BUCKET }}" \
+              --key "$dir" \
+              --body "$f" \
+              --content-type "text/html; charset=utf-8" \
+              --cache-control "no-store, no-cache, must-revalidate, max-age=0"
+          fi
+        done
+
     # Images and icons are content-stable and never renamed in place.
     - name: Cache the images hard
       run: |
