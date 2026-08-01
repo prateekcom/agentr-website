@@ -9,6 +9,8 @@
   gtag('js', new Date());
   gtag('config', 'G-MGH3D6JDNG');
 </script>
+<!-- Leadfeeder (lfeeder.com) — self-injects async, so it costs no parse time here -->
+<script> (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js'); })(document,'script'); })('bElvO73zqkG8ZMqj'); </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AgentR platform security</title>
@@ -48,7 +50,7 @@ addEventListener('pageshow', _top);
 <body>
 <nav>
   <div class="nav-in">
-    <a class="logo" href="../" aria-label="AgentR home"><img class="mark" src="../agentr-logo.png" alt="AgentR" /></a>
+    <a class="logo" href="../" aria-label="AgentR home"><img class="mark" src="../agentr-logo.png" width="512" height="146" alt="AgentR" /></a>
     <div class="nav-links">
       <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -106,11 +108,40 @@ addEventListener('pageshow', _top);
 </div>
 
 <main>
-<header class="phead wrap">
-  <span class="kicker">security and ethics</span>
-  <h1>Setting the limits of <span class="serif">responsible AI.</span></h1>
-  <p class="lede">Built with fairness, security, and human judgment at the core, AgentR is meant to
-    empower hiring without overstepping.</p>
+<!-- Hero. The words are the page's own: kicker, headline and lede exactly as
+     written. The card beside them only restages two sentences from the article
+     below — "it never decides who moves forward" and "every final decision
+     remains with a human evaluator" — so the page states its point before the
+     reading starts. Violet is the machine, brass is the hand, same as the
+     landing page. -->
+<header class="phead wrap split">
+  <div class="htext">
+    <span class="kicker">security and ethics</span>
+    <h1>Setting the limits of <span class="serif">responsible AI.</span></h1>
+    <p class="lede">Built with fairness, security, and human judgment at the core, AgentR is meant to
+      empower hiring without overstepping.</p>
+  </div>
+  <div class="hvis">
+    <div class="hvis-card">
+      <span class="hvis-tape" aria-hidden="true"></span>
+      <span class="hvis-kicker">where the line sits</span>
+      <div class="hvis-row">
+        <div><span class="hvis-label">Highlights risks, surfaces patterns</span>
+          <span class="hvis-sub">Against a rubric you can read</span></div>
+        <span class="hvis-badge ok">AI</span>
+      </div>
+      <div class="hvis-row">
+        <div><span class="hvis-label">Grades answers, shows the evidence</span>
+          <span class="hvis-sub">The verbatim line that earned it</span></div>
+        <span class="hvis-badge ok">AI</span>
+      </div>
+      <div class="hvis-row">
+        <div><span class="hvis-label">Decides who moves forward</span>
+          <span class="hvis-sub">Nothing in the pipeline rejects an applicant</span></div>
+        <span class="hvis-badge flag">&#9998; human</span>
+      </div>
+    </div>
+  </div>
 </header>
 
 <section class="wrap band" style="padding-top:0">
@@ -126,7 +157,6 @@ addEventListener('pageshow', _top);
       <li><a href="#never">What we never do</a></li>
       <li><a href="#access">Access control and infrastructure</a></li>
       <li><a href="#retention">Retention and deletion</a></li>
-      <li><a href="#limits">The honest limits</a></li>
       <li><a href="#report">Reporting a vulnerability</a></li>
     </ol>
   </div>
@@ -211,11 +241,11 @@ addEventListener('pageshow', _top);
     <h2 id="retention">Retention and deletion</h2>
     <p>Retention is configured per organisation, because employers have their own legal obligations
       about how long applications must be kept. Deletion requests are honoured subject to those
-      obligations, and can be started from the <a href="../for-candidates/">candidate page</a> or by
-      emailing <a href="mailto:legal.vibencode@gmail.com">legal.vibencode@gmail.com</a>.</p>
+      obligations, and can be started from the <a href="https://candidate.agentr.global/" target="_blank" rel="noopener">candidate login</a> or by
+      emailing <a href="mailto:hello@agentr.global">hello@agentr.global</a>.</p>
 
     <h2 id="report">Reporting a vulnerability</h2>
-    <p>Email <a href="mailto:legal.vibencode@gmail.com">legal.vibencode@gmail.com</a>. Tell us what
+    <p>Email <a href="mailto:hello@agentr.global">hello@agentr.global</a>. Tell us what
       you found and how to reproduce it. We will confirm receipt, keep you updated, and we will not
       pursue anyone acting in good faith.</p>
   </div>
@@ -226,7 +256,7 @@ addEventListener('pageshow', _top);
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <img src="../agentr-logo.png" alt="AgentR" />
+        <img src="../agentr-logo.png" width="512" height="146" alt="AgentR" />
         <p>Reads every application, checks what candidates claim, and hands you a shortlist with the reasoning attached.</p>
       </div>
       <div class="foot-col"><b>process</b>

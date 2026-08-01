@@ -9,6 +9,8 @@
   gtag('js', new Date());
   gtag('config', 'G-MGH3D6JDNG');
 </script>
+<!-- Leadfeeder (lfeeder.com) — self-injects async, so it costs no parse time here -->
+<script> (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js'); })(document,'script'); })('bElvO73zqkG8ZMqj'); </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>When everyone is using bots, how do you find the humans who matter?</title>
@@ -48,7 +50,7 @@ addEventListener('pageshow', _top);
 <body>
 <nav>
   <div class="nav-in">
-    <a class="logo" href="../../" aria-label="AgentR home"><img class="mark" src="../../agentr-logo.png" alt="AgentR" /></a>
+    <a class="logo" href="../../" aria-label="AgentR home"><img class="mark" src="../../agentr-logo.png" width="512" height="146" alt="AgentR" /></a>
     <div class="nav-links">
       <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -116,8 +118,15 @@ addEventListener('pageshow', _top);
 
 <section class="wrap band" style="padding-top:0">
   <div class="prose article">
+    <!-- WebP first, PNG kept as the fallback. The banner is this page's LCP element
+         and was 587KB of the 636KB it used to load; fetchpriority tells the browser
+         to go after it before the lazy figures further down. -->
     <figure class="banner">
-      <img src="../../assets/banner-img.png" alt="" width="2000" height="1125" />
+      <picture>
+        <source srcset="../../assets/banner-img.webp" type="image/webp" />
+        <img src="../../assets/banner-img.png" alt="" width="1600" height="900"
+          fetchpriority="high" decoding="async" />
+      </picture>
     </figure>
     <p>In 1482, Leonardo da Vinci penned history&rsquo;s first modern resume, a ten-point manifesto
       offering to build portable bridges, stealth chariots and &ldquo;beautiful bronze horses&rdquo;.
@@ -142,9 +151,12 @@ addEventListener('pageshow', _top);
       tools to write AI-optimised resumes, ATS systems are already bloated with artificially
       identical candidates.</p>
     <figure>
-      <img src="../../assets/eval.png" width="1600" height="900" loading="lazy"
-        alt="Two ranking charts side by side. Human-written resumes: two clear the 0.6 similarity
-             threshold. AI-optimised resumes: twelve or more clear it." />
+      <picture>
+        <source srcset="../../assets/eval.webp" type="image/webp" />
+        <img src="../../assets/eval.png" width="1600" height="900" loading="lazy" decoding="async"
+          alt="Two ranking charts side by side. Human-written resumes: two clear the 0.6 similarity
+               threshold. AI-optimised resumes: twelve or more clear it." />
+      </picture>
       <figcaption>Impact of AI on ATS rankings: only two human-written resumes pass the threshold,
         while twelve or more AI-optimised resumes qualify.</figcaption>
     </figure>
@@ -181,10 +193,14 @@ addEventListener('pageshow', _top);
       ATS score, which is just a number, you can backtrace and verify the rationale behind why a
       given candidate was recommended.</p>
     <figure>
-      <img src="../../assets/algo_comparisions.png" width="1600" height="900" loading="lazy"
-        alt="Six metrics comparing a generic ATS with AgentR evaluation against blind human
-             rankings: Spearman, Kendall Tau, mean absolute difference, Precision@5, NDCG@5 and
-             Precision@10." />
+      <picture>
+        <source srcset="../../assets/algo_comparisions.webp" type="image/webp" />
+        <img src="../../assets/algo_comparisions.png" width="1600" height="900" loading="lazy"
+          decoding="async"
+          alt="Six metrics comparing a generic ATS with AgentR evaluation against blind human
+               rankings: Spearman, Kendall Tau, mean absolute difference, Precision@5, NDCG@5 and
+               Precision@10." />
+      </picture>
       <figcaption>Against blind human rankings: Spearman 0.60 against 0.04, Kendall Tau 0.44
         against 0.02, and Precision@5 0.80 against 0.40. Controlled evaluations, and further study
         to validate them is in progress.</figcaption>
@@ -217,7 +233,7 @@ addEventListener('pageshow', _top);
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <img src="../../agentr-logo.png" alt="AgentR" />
+        <img src="../../agentr-logo.png" width="512" height="146" alt="AgentR" />
         <p>Reads every application, checks what candidates claim, and hands you a shortlist with the reasoning attached.</p>
       </div>
       <div class="foot-col"><b>process</b>
