@@ -122,16 +122,20 @@ addEventListener('pageshow', _top);
     </ul>
   </div>
   <div class="hvis">
-    <div class="hvis-card">
+    <div class="hvis-card stamped">
       <span class="hvis-tape" aria-hidden="true"></span>
       <span class="hvis-kicker">cheating tools &middot; blocked live</span>
       <div class="hvis-row">
-        <div><span class="hvis-label with-ico"><span class="hvis-ico" aria-hidden="true">C</span>Cluely</span>
+        <!-- alt="" on purpose: the name is right beside it, so the mark is
+             decorative and a screen reader would only read "Cluely" twice -->
+        <div><span class="hvis-label with-ico"><img class="hvis-ico" src="../assets/cluely.png"
+          alt="" width="40" height="40" />Cluely</span>
           <span class="hvis-sub">Overlay reading answers off-screen</span></div>
         <span class="hvis-badge blocked">&#10005; blocked</span>
       </div>
       <div class="hvis-row">
-        <div><span class="hvis-label with-ico"><span class="hvis-ico" aria-hidden="true">P</span>Parakeet</span>
+        <div><span class="hvis-label with-ico"><img class="hvis-ico" src="../assets/parakeet.png"
+          alt="" width="40" height="40" />Parakeet</span>
           <span class="hvis-sub">Hidden transcription assistant</span></div>
         <span class="hvis-badge blocked">&#10005; blocked</span>
       </div>
@@ -140,6 +144,7 @@ addEventListener('pageshow', _top);
           <span class="hvis-sub">Screen-capture signature detected</span></div>
         <span class="hvis-badge blocked">&#10005; blocked</span>
       </div>
+      <span class="hvis-stamp" aria-hidden="true"><b>room locked</b><small>until it clears</small></span>
     </div>
   </div>
 </header>
@@ -168,6 +173,32 @@ addEventListener('pageshow', _top);
         seen, and build each follow-up on their own prior answer &mdash; so a pre-scripted answer
         breaks down two turns in.</p></div>
   </div>
+</section>
+
+<section class="wrap band">
+  <h2 class="sec">The layer underneath: <span class="serif">AgentR Guard.</span></h2>
+  <p class="lead">Everything above is about how the interview is built. Guard is about the machine
+    it happens on. A desktop app for macOS and Windows, running for the length of the session,
+    watching the environment rather than the answers.</p>
+  <ul class="ruled lbl">
+    <li><b>the machine</b><div><span class="t">Processes, windows and screen capture, read at OS level</span>
+      <p>An overlay built to hide from screen sharing is still a process on the machine, still
+        drawing a window, still reading the display. That is the layer Guard sits at, which is why
+        a tool designed to be invisible to a video call is not invisible to it.</p></div></li>
+    <li><b>the network</b><div><span class="t">Where the machine is talking during the session</span>
+      <p>An answer arriving from somewhere is traffic before it is ever text on a screen.</p></div></li>
+    <li><b>camera and mic</b><div><span class="t">Who is in the room, and who is speaking</span>
+      <p>A second face, a phone held below the desk, a voice that is not the candidate&rsquo;s.</p></div></li>
+    <li><b>the room</b><div><span class="t">It can hold the session shut until the machine is clean</span>
+      <p>When something is found the interview stops, rather than carrying on compromised, and
+        reopens once it clears. That is a pause and a marker for a person to review. It closes a
+        room; it never closes the door on a candidate.</p></div></li>
+  </ul>
+
+  <h3 class="sub2">It works when a person is asking the questions too</h3>
+  <p class="lead">Guard is not tied to the AgentR interview. Run it alongside a human interview on
+    whatever call software you already use, and the same layer is watching for the same overlay
+    tools. The conversation stays yours. Only the machine is checked.</p>
 </section>
 
 <section class="wrap band">
