@@ -25,14 +25,16 @@
 <meta property="og:url" content="https://agentr.global/" />
 <meta property="og:site_name" content="AgentR" />
 <meta property="og:locale" content="en" />
-<meta property="og:image" content="https://agentr.global/assets/android-chrome-512x512.png" />
-<meta property="og:image:alt" content="AgentR" />
+<meta property="og:image" content="https://agentr.global/assets/og-default.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="AgentR — infinite resumes, one perfect hire" />
 <!-- social cards. og:image must be an absolute URL: update the domain if this
      moves off GitHub Pages -->
 <meta property="og:type" content="website" />
 <meta property="og:title" content="AgentR, the hiring assistant that reads every application" />
 <meta property="og:description" content="AgentR reads every application, checks what candidates actually claim, and interviews the ones who clear your bar. You make every call." />
-<meta name="twitter:card" content="summary" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="AgentR, the hiring assistant that reads every application" />
 <meta name="twitter:description" content="AgentR reads every application, checks what candidates actually claim, and interviews the ones who clear your bar. You make every call." />
 <script>
@@ -217,6 +219,11 @@ if(matchMedia('(max-width:760px)').matches){
     opacity:0;visibility:hidden;transform:translateY(-8px);
     transition:opacity .28s,transform .28s cubic-bezier(.2,.7,.2,1),visibility .28s}
   .navdrop.on .navdrop-p{opacity:1;visibility:visible;transform:none}
+  /* Use Cases sits far enough right that centring a 600px panel on its button put
+     it up to 39px past the viewport between 901 and ~1210, and body's
+     overflow-x:hidden clipped the right-hand column of links rather than
+     scrolling. Anchored to the button's right edge instead. */
+  .navdrop-p.end{left:auto;right:0;margin-left:0;margin-right:-24px}
   /* an invisible bridge so the pointer can cross the gap without the panel closing */
   .navdrop-p::before{content:"";position:absolute;left:0;right:0;top:-18px;height:18px}
   .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
@@ -1046,7 +1053,7 @@ if(matchMedia('(max-width:760px)').matches){
         <button class="navdrop-t" type="button" aria-expanded="false" aria-controls="dd-usecases">
           Use Cases <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1.5 5.5 5.5 10 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <div class="navdrop-p" id="dd-usecases" role="group" aria-label="Use Cases">
+        <div class="navdrop-p end" id="dd-usecases" role="group" aria-label="Use Cases">
           <div class="dd-grid">
             <a href="resume-verification/"><span class="dd-n">01</span><span class="dd-x"><b>Resume Verification</b><i>Every claim read in context, not lifted out as a keyword.</i></span></a>
             <a href="ai-cheating-prevention/"><span class="dd-n">02</span><span class="dd-x"><b>AI Cheating Prevention</b><i>Built for the copilot era: divided attention, novel questions.</i></span></a>
