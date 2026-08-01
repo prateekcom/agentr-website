@@ -99,32 +99,3 @@ document.querySelectorAll('.navdrop').forEach(function(dd){
   };
   document.head.appendChild(s);
 })();
-
-/* practice page: the result card writes itself in on load, once. The resting
-   state in CSS is the finished frame, so a page with no JS, or with reduced
-   motion, still shows everything. */
-(function(){
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var card = document.querySelector('.rescard');
-  if(card){
-    var score = card.querySelector('.rc-score b');
-    var to = score ? parseInt(score.textContent, 10) : NaN;
-    requestAnimationFrame(function(){
-      card.classList.add('play');
-      if(!isNaN(to)){
-        score.textContent = '0';
-        var t0 = 0;
-        (function step(ts){
-          if(!t0) t0 = ts;
-          var k = Math.min(1, (ts - t0) / 900);
-          score.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
-          if(k < 1) requestAnimationFrame(step);
-        })(performance.now());
-      }
-      /* hand the transform back to CSS once it has played, or the animation's
-         fill state locks the hover out */
-      setTimeout(function(){ card.classList.remove('play'); }, 1500);
-    });
-  }
-})();
