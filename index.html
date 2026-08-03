@@ -1628,11 +1628,33 @@ if(!reduced && !PHONE){
 if(!reduced && !PHONE) gsap.set('nav',{opacity:0,y:-18});
 
 let heroPlayed = false;
-function playHero(){
+/* the scroll invitation keeps hopping forever, whether the hero was animated in
+   or landed on its finished frame */
+function hopNote(){
+  gsap.timeline({repeat:PHONE?1:-1,delay:4.8,repeatDelay:.7})
+    .to('.hand-note',{y:-12,duration:.35,ease:'power2.out'})
+    .to('.hand-note',{y:0,duration:.65,ease:'bounce.out'});
+}
+function playHero(instant){
   if(heroPlayed) return; heroPlayed = true;
   /* the four-second cinematic open is a desktop pleasure. On a phone it is four
      seconds before the headline is readable, so the hero simply arrives. */
   const SIMPLE = reduced || PHONE;
+  /* Seen it inside the gate's recall window: jump to the end frame. Same half
+     hour and the same stored key as the gate, so one visit buys one opening and
+     a reload five minutes later does not spend four seconds replaying it. Every
+     value below is the resting state of the tween it replaces. */
+  if(instant){
+    gsap.set('header .rv',{opacity:1,y:0});
+    if(!SIMPLE){
+      gsap.set(ip,{strokeDashoffset:0});
+      gsap.set('.infw',{clipPath:'inset(-20% -6% -20% 0)'});
+      gsap.set('.infw2',{opacity:1,y:0,scale:1});
+      gsap.set('nav',{opacity:1,y:0});
+      hopNote();
+    }
+    return;
+  }
   if(!SIMPLE){
     gsap.to(ip,{strokeDashoffset:0,duration:1.15,ease:'power1.inOut',delay:.4});
     gsap.fromTo('.infw',
@@ -1646,10 +1668,7 @@ function playHero(){
   gsap.to('header .rv:not(h1)',{opacity:1,y:0,duration:1,ease:'power3.out',stagger:.09,delay:SIMPLE?0:3.4});
   if(!SIMPLE){
     gsap.fromTo('nav',{opacity:0,y:-18},{opacity:1,y:0,duration:.9,ease:'power3.out',delay:3.4});
-    /* the scroll invitation keeps hopping forever */
-    gsap.timeline({repeat:PHONE?1:-1,delay:4.8,repeatDelay:.7})
-      .to('.hand-note',{y:-12,duration:.35,ease:'power2.out'})
-      .to('.hand-note',{y:0,duration:.65,ease:'bounce.out'});
+    hopNote();
   }
 }
 /* no gate on the page for any reason: play it straight away rather than never */
@@ -2105,7 +2124,9 @@ tl
       applyVariant(seen.v);
       gate.style.display = 'none';
       unlock();
-      playHero();
+      /* the opening is on the same half-hour memory as the gate: they saw it, so
+         land on the finished hero rather than replaying it */
+      playHero(true);
     }
 
     /* ?p=volume|fit|trust lands straight on the framed hero, gate skipped */
