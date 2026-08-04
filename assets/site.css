@@ -387,12 +387,18 @@ a.card:hover h3{color:var(--accent)}
    row's measure. The caption lives outside the frame on purpose: drop a real
    <img> into .photoframe-ph later and the caption underneath still reads
    correctly, instead of vanishing with the placeholder it was written on. */
-.photoframe{width:70%;margin:14px 0 18px}
+.photoframe{width:50%;margin:14px 0 18px}
 .photoframe-ph{background:var(--card);border:1px solid var(--line);border-radius:18px;
-  box-shadow:var(--shadow-sm);aspect-ratio:16/9;display:grid;place-items:center;overflow:hidden}
+  box-shadow:var(--shadow-sm);aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}
 .photoframe-ph span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.55}
-.photoframe img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:18px}
+/* height:auto is load-bearing: the width/height attributes on the <img> map to
+   CSS width and height, and the height hint beats aspect-ratio, so a 600x800
+   photo would otherwise render 800px tall instead of filling the frame.
+   The crop sits above centre because a landscape window cut from a portrait
+   photo is a band, and centred it lands on torsos rather than faces. */
+.photoframe img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;
+  object-position:center 40%;border-radius:18px;box-shadow:var(--shadow-sm)}
 .photoframe figcaption{margin-top:9px;font-family:'Caveat',cursive;font-weight:600;font-size:17px;
   color:var(--brass-deep);transform:rotate(-1deg);display:inline-block}
 
