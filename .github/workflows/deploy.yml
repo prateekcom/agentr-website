@@ -12,7 +12,7 @@ jobs:
     env:
       BUCKET: agentr-prod-landing-page
       REGION: ap-south-1
-      DIST_ID: E1PMBXZHPFWUET
+      DIST_ID: E1PMBXZHPFWUET            # d3vqb912otkjbx.cloudfront.net
 
     steps:
     - name: Checkout Repository
@@ -25,7 +25,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.REGION }}
 
-    - name: Copy files to the bucket
+    # No build step: the site is plain HTML, CSS and JS, committed as it ships.
+    - name: Copy files to the bucket with the AWS CLI
       run: |
         aws s3 sync . s3://${{ env.BUCKET }} --delete \
           --exclude ".git/*" \
@@ -34,6 +35,13 @@ jobs:
           --exclude ".gitignore" \
           --exclude ".DS_Store"
 
+    # Every page is a separate index.html, so this cannot target one file the way
+    # the React deploy does.
+    # s-maxage lets CloudFront hold the page indefinitely while max-age=0 keeps
+    # the browser revalidating, so a repeat visitor still gets the new build.
+    # Staleness after a deploy is handled by the invalidation at the end of this
+    # job, not by refusing to cache: no-store meant every request travelled to
+    # ap-south-1 and the CDN did nothing for HTML at all.
     - name: Set HTML caching
       run: |
         aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
@@ -42,6 +50,17 @@ jobs:
           --content-type "text/html; charset=utf-8" \
           --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
 
+    # CloudFront's S3 REST origin has no index-document concept: a request for
+    # /smarter-screening/ asks for a key literally named "smarter-screening/",
+    # which does not exist, so the origin 403s and the distribution's error
+    # response serves the landing page instead. S3 does allow a key ending in a
+    # slash, so write every page to that key as well and directory URLs resolve
+    # at the origin. The bare key is written too, or /smarter-screening without
+    # the slash falls through to the error response and serves the landing page.
+    # Both forms carry the page's canonical tag, so search engines consolidate
+    # them. The root needs no copy: it is the default root object.
+    # A CloudFront Function rewriting the URI would be the tidier fix, but this
+    # keeps the whole thing inside the deploy.
     - name: Publish directory URLs
       run: |
         find . -name index.html -not -path "./.git/*" -not -path "./.github/*" | while read -r f; do
@@ -59,6 +78,7 @@ jobs:
           fi
         done
 
+    # Images and icons are content-stable and never renamed in place.
     - name: Cache the images hard
       run: |
         aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
@@ -66,50 +86,47 @@ jobs:
           --metadata-directive REPLACE \
           --cache-control "public, max-age=31536000, immutable"
 
-    - name: Wait for distribution to be deployable
-      run: |
-        aws cloudfront wait distribution-deployed --id ${{ env.DIST_ID }}
-
-    - name: Point 403/404 errors at 404.html
-      run: |
-        CONFIG=$(aws cloudfront get-distribution \
-          --id ${{ env.DIST_ID }} \
-          --query 'Distribution' \
-          --output json)
-        ETAG=$(aws cloudfront get-distribution \
-          --id ${{ env.DIST_ID }} \
-          --query 'ETag' \
-          --output text)
-
-        UPDATED=$(echo "$CONFIG" | jq '
-          .DistributionConfig.CustomErrorResponses = {
-            "Quantity": 2,
-            "Items": [
-              {
-                "ErrorCode": 403,
-                "ResponsePagePath": "/404.html",
-                "ResponseCode": 404,
-                "ErrorCachingMinTTL": 300
-              },
-              {
-                "ErrorCode": 404,
-                "ResponsePagePath": "/404.html",
-                "ResponseCode": 404,
-                "ErrorCachingMinTTL": 300
-              }
-            ]
-          }
-        ')
-
-        aws cloudfront update-distribution \
-          --id ${{ env.DIST_ID }} \
-          --distribution-config "$UPDATED" \
-          --if-match "$ETAG" \
-          --query 'Distribution.DomainName' \
-          --output text
-
-    - name: Invalidate CloudFront Cache
+    - name: Invalidate Cloudfront Cache
       run: |
         aws cloudfront create-invalidation \
           --distribution-id ${{ env.DIST_ID }} \
           --paths "/*"
+
+    # The 403 fallback used to serve the landing page as a 200 for every miss.
+    # With directory keys written at the origin, the error response only fires
+    # for genuinely missing pages, so point it at a real 404. Asserted here so
+    # the whole distribution behaviour lives in the deploy; skipped when the
+    # config already matches, since update-distribution redeploys the
+    # distribution (a few minutes, non-blocking) and there is no point doing
+    # that on every push.
+    - name: Ensure 404 error response
+      run: |
+        set -euo pipefail
+        tmp=$(mktemp -d)
+        aws cloudfront get-distribution-config --id "$DIST_ID" > "$tmp/full.json"
+        etag=$(jq -r '.ETag' "$tmp/full.json")
+        jq '.DistributionConfig' "$tmp/full.json" > "$tmp/config.json"
+
+        if jq -e '.CustomErrorResponses.Items[]?
+                  | select(.ErrorCode == 403
+                           and .ResponsePagePath == "/404.html"
+                           and .ResponseCode == "404")' \
+                 "$tmp/config.json" > /dev/null; then
+          echo "Error responses already configured"
+          exit 0
+        fi
+
+        jq '.CustomErrorResponses = {
+              Quantity: 2,
+              Items: [
+                { ErrorCode: 403, ResponsePagePath: "/404.html",
+                  ResponseCode: "404", ErrorCachingMinTTL: 30 },
+                { ErrorCode: 404, ResponsePagePath: "/404.html",
+                  ResponseCode: "404", ErrorCachingMinTTL: 30 }
+              ]
+            }' "$tmp/config.json" > "$tmp/updated.json"
+
+        aws cloudfront update-distribution \
+          --id "$DIST_ID" \
+          --distribution-config "file://$tmp/updated.json" \
+          --if-match "$etag"
