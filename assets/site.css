@@ -388,6 +388,8 @@ a.card:hover h3{color:var(--accent)}
    <img> into .photoframe-ph later and the caption underneath still reads
    correctly, instead of vanishing with the placeholder it was written on. */
 .photoframe{width:50%;margin:14px 0 18px}
+/* half the measure is a 168px thumbnail on a phone, and the caption wraps */
+@media(max-width:560px){.photoframe{width:100%}}
 .photoframe-ph{background:var(--card);border:1px solid var(--line);border-radius:18px;
   box-shadow:var(--shadow-sm);aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}
 .photoframe-ph span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;

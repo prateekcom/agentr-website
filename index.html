@@ -60,7 +60,12 @@ try{
    class is latched at load, so the answer can never change underneath the page.
    The script at the bottom of body reads this same class instead of re-testing
    the width, so CSS and JS cannot disagree. */
-if(matchMedia('(max-width:760px)').matches){
+/* the height clause catches a phone held sideways: 812px wide passes the width
+   test, but it is still a touch screen 375px tall, and the gate plus the
+   cinematic open have no room to live there. Coarse-pointer keeps short desktop
+   windows out of it. */
+if(matchMedia('(max-width:760px)').matches ||
+   (matchMedia('(pointer:coarse)').matches && matchMedia('(max-height:500px)').matches)){
   document.documentElement.classList.add('no-gate');
 }
 </script>
@@ -132,6 +137,12 @@ if(matchMedia('(max-width:760px)').matches){
   }
   nav.scrolled{background:rgba(245,242,236,.88);backdrop-filter:blur(14px);
     box-shadow:0 1px 0 var(--line)}
+  /* on a phone the backdrop is always on: the frameless-over-hero effect is
+     barely visible at this size, and the .scrolled toggle lives in a CDN script,
+     so without this a failed load leaves body text scrolling through the bar */
+  @media(max-width:760px){
+    nav{background:rgba(245,242,236,.88);backdrop-filter:blur(14px)}
+  }
   /* the nav.dark set that used to flip the bar to ink over the Guard section is gone
      with the dark Guard ground itself — nothing has added the class since. */
   .nav-in{max-width:1120px;margin:0 auto;padding:16px clamp(20px,5vw,44px);
@@ -279,8 +290,10 @@ if(matchMedia('(max-width:760px)').matches){
     transition:border-color .2s,box-shadow .2s;
   }
   .waitlist:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(84,56,204,.14),var(--shadow-md)}
+  /* 16px is a floor, not a taste: iOS Safari zooms the page on focusing any
+     input below 16px and leaves it zoomed after submit */
   .waitlist input{flex:1;min-width:0;border:none;background:none;outline:none;
-    padding:0 8px 0 16px;font-family:inherit;font-size:15px;color:var(--text)}
+    padding:0 8px 0 16px;font-family:inherit;font-size:16px;color:var(--text)}
   /* #A6ABA6 measured 2.33:1 on white and failed AA. This is the only visible label
      the field has, so it has to be readable. */
   .waitlist input::placeholder{color:#6B6577}
@@ -528,6 +541,12 @@ if(matchMedia('(max-width:760px)').matches){
 
   /* ---------------- sections after ---------------- */
   section.flat{padding:84px 0}
+  /* a phone screen is ~800px tall: 170px above the hero and 168px between two
+     flat sections is dead scroll there, not breathing room */
+  @media(max-width:760px){
+    header{padding:120px 0 72px}
+    section.flat{padding:56px 0}
+  }
   .center{text-align:center}
   h2{font-size:clamp(32px,4.8vw,54px);letter-spacing:-.035em;font-weight:800;line-height:1.05}
   h2 .serif{font-size:1.05em;color:var(--accent)}
@@ -1117,6 +1136,7 @@ if(matchMedia('(max-width:760px)').matches){
     <a href="faster-scheduling/"><span class="mm-n">03</span>Faster Scheduling<i>No calendars, no slots. One link, good for fourteen hours.</i></a>
     <a href="fairer-interviews/"><span class="mm-n">04</span>Fairer Interviews<i>Questions built from the role, answers scored against a written rubric.</i></a>
   </div>
+  <a class="mm-link" href="pricing/">Pricing</a>
   <div class="mm-group">
     <b>use cases</b>
     <a href="resume-verification/"><span class="mm-n">01</span>Resume Verification<i>Every claim read in context, not lifted out as a keyword.</i></a>
@@ -1124,7 +1144,8 @@ if(matchMedia('(max-width:760px)').matches){
     <a href="volume-screening/"><span class="mm-n">03</span>Volume Screening<i>The same rubric for applicant one and applicant a thousand.</i></a>
     <a href="pre-bgv-filter/"><span class="mm-n">04</span>Pre-BGV Filter<i>A consistency check before formal verification spend.</i></a>
   </div>
-  <a class="mm-link" href="pricing/">Pricing</a>
+  <a class="mm-link" href="for-candidates/">For candidates</a>
+  <a class="mm-link" href="investors/">For investors</a>
   <a class="btn" href="#waitlist">Join waitlist <span class="arr">→</span></a>
 </div>
 
@@ -1399,13 +1420,16 @@ if(matchMedia('(max-width:760px)').matches){
     <h2 class="rv">How it works, <span class="serif">in four numbers.</span></h2>
     <p class="lead rv">No made-up statistics. Just what it does every time, and the one number you pick yourself.</p>
     <div class="stats-grid">
-      <div class="stat rv"><div class="num" data-to="100" data-suffix="%">0</div><div class="lbl">Every application is read in full. Nobody gets skipped.</div></div>
+      <!-- resting state = finished frame. The count-up zeroes these before it
+           runs, so if the CDN script never arrives the page shows the truth
+           instead of claiming it reads 0 applications. -->
+      <div class="stat rv"><div class="num" data-to="100" data-suffix="%">100%</div><div class="lbl">Every application is read in full. Nobody gets skipped.</div></div>
       <div class="stat rv">
         <div class="num" data-to="0" data-suffix="">0</div>
         <div class="lbl">Applications the software rejects on its own. Every no comes from a person on your team.</div>
       </div>
-      <div class="stat rv"><div class="num" data-to="20" data-suffix="">0</div><div class="lbl">Things we look at in each resume, like how a career has grown, or what a gap was for.</div></div>
-      <div class="stat rv"><div class="num" data-to="80" data-suffix="%">0</div><div class="lbl">How closely someone has to match what you asked for before we invite them to interview. You pick this number.</div></div>
+      <div class="stat rv"><div class="num" data-to="20" data-suffix="">20</div><div class="lbl">Things we look at in each resume, like how a career has grown, or what a gap was for.</div></div>
+      <div class="stat rv"><div class="num" data-to="80" data-suffix="%">80%</div><div class="lbl">How closely someone has to match what you asked for before we invite them to interview. You pick this number.</div></div>
     </div>
   </div>
 </section>
@@ -1794,9 +1818,13 @@ if(!reduced){
     .set('.gm-cheat',{scale:1});
 }
 
-/* count-up stats */
+/* count-up stats. The markup carries the finished values, so this zeroes them
+   only once it is actually going to count: no JS or reduced motion means the
+   real numbers, not a page claiming it reads 0 applications. */
 document.querySelectorAll('.num').forEach(n=>{
   const to = +n.dataset.to, suf = n.dataset.suffix||'';
+  if(reduced) return;
+  n.textContent = '0'+suf;
   const o = {v:0};
   gsap.to(o,{v:to,duration:1.6,ease:'power2.out',
     onUpdate:()=>n.textContent=Math.round(o.v)+suf,
