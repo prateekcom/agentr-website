@@ -1,0 +1,30 @@
+# AgentR
+
+> AgentR is an AI hiring assistant that reads every job application in full, checks what candidates claim against the public record, and runs structured interviews scored against a rubric written before anyone applied. The hiring team receives a ranked shortlist with the evidence attached. Nobody is auto-rejected; every decision stays with a human.
+
+AgentR is built by Vibencode Private Limited (Sagar, Madhya Pradesh, India) and is in private beta. Contact: hello@agentr.global.
+
+## Docs
+
+- [Machine-readable overview](https://agentr.global/ai/): the full product summary written for language models — what it is, how it works, what it will not do, pricing, and FAQs
+- [Homepage in markdown](https://agentr.global/index.md): the landing page's content as plain markdown
+- [Pricing](https://agentr.global/pricing/): credit-based billing — one balance drawn down by AI work, no seats, no per-user fees; private beta starts with $100 in credits
+- [Smarter Screening](https://agentr.global/smarter-screening/): every application read and scored against your criteria
+- [Better Shortlisting](https://agentr.global/better-shortlisting/): ranking on twenty signals with the evidence behind each one
+- [Faster Scheduling](https://agentr.global/faster-scheduling/): no calendars or slots — one link, valid fourteen hours
+- [Fairer Interviews](https://agentr.global/fairer-interviews/): questions built from the role, answers scored against a written rubric
+- [Resume Verification](https://agentr.global/resume-verification/): claims checked in context against the public record, six verdict classes
+- [AI Cheating Prevention](https://agentr.global/ai-cheating-prevention/): interview integrity for the copilot era, including the AgentR Guard desktop app
+- [Volume Screening](https://agentr.global/volume-screening/): the same rubric for applicant one and applicant a thousand
+- [Pre-BGV Filter](https://agentr.global/pre-bgv-filter/): a consistency check before formal background-verification spend
+- [For candidates](https://agentr.global/for-candidates/): what happens to an application, what is recorded, what is never done
+- [AI transparency notice](https://agentr.global/candidate-privacy/): how AI is used on candidate data, in plain language
+
+## Optional
+
+- [About](https://agentr.global/about/): why the team built it
+- [For investors](https://agentr.global/investors/): thesis, traction, and the round
+- [Privacy policy](https://agentr.global/privacy-policy/): including the AgentR Guard desktop-app section
+- [Terms and conditions](https://agentr.global/terms-and-conditions/)
+- [Platform security](https://agentr.global/platform-security/)
+- [Sitemap](https://agentr.global/sitemap.xml)

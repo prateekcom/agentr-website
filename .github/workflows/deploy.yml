@@ -78,11 +78,46 @@ jobs:
           fi
         done
 
+    # site.css/site.js/landing.css/landing.js are not content-hashed, so they can
+    # never be immutable: a deploy that changes them must reach people who already
+    # hold a copy. Same policy as the HTML. Content-type is explicit because the
+    # REPLACE directive rewrites all metadata and the responses carry
+    # x-content-type-options: nosniff — a guessed type is a broken site.
+    - name: Set CSS and JS caching
+      run: |
+        aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
+          --exclude "*" --include "*.css" \
+          --metadata-directive REPLACE \
+          --content-type "text/css; charset=utf-8" \
+          --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
+        aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
+          --exclude "*" --include "*.js" \
+          --metadata-directive REPLACE \
+          --content-type "application/javascript; charset=utf-8" \
+          --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
+
+    # llms.txt and *.md are read by agents and language-model crawlers; they get
+    # the HTML cache policy (they change with the copy) and explicit types so a
+    # markdown request is answered as markdown, not octet-stream.
+    - name: Set markdown artifact types
+      run: |
+        aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
+          --exclude "*" --include "*.md" \
+          --metadata-directive REPLACE \
+          --content-type "text/markdown; charset=utf-8" \
+          --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
+        aws s3 cp s3://${{ env.BUCKET }}/llms.txt s3://${{ env.BUCKET }}/llms.txt \
+          --metadata-directive REPLACE \
+          --content-type "text/plain; charset=utf-8" \
+          --cache-control "public, max-age=0, s-maxage=31536000, must-revalidate"
+
     # Images and icons are content-stable and never renamed in place.
     - name: Cache the images hard
       run: |
         aws s3 cp s3://${{ env.BUCKET }} s3://${{ env.BUCKET }} --recursive \
-          --exclude "*" --include "*.png" --include "*.ico" \
+          --exclude "*" \
+          --include "*.png" --include "*.ico" --include "*.jpg" \
+          --include "*.jpeg" --include "*.webp" --include "*.svg" \
           --metadata-directive REPLACE \
           --cache-control "public, max-age=31536000, immutable"
 
@@ -91,3 +126,34 @@ jobs:
         aws cloudfront create-invalidation \
           --distribution-id ${{ env.DIST_ID }} \
           --paths "/*"
+
+    # The tests for a static site are its public endpoints. Any failure fails
+    # the deploy loudly rather than shipping a silently broken machine surface.
+    - name: Verify public endpoints
+      run: |
+        set -e
+        BASE="https://d3vqb912otkjbx.cloudfront.net"
+        fail=0
+        check() {
+          desc="$1"; want="$2"; got="$3"
+          if [ "$got" = "$want" ]; then echo "ok   $desc"
+          else echo "FAIL $desc: want [$want] got [$got]"; fail=1; fi
+        }
+        sleep 20   # give the invalidation a moment at the edge
+        check "404 for a missing path" "404" \
+          "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/definitely-not-a-page/")"
+        check "llms.txt served as text" "200 text/plain; charset=utf-8" \
+          "$(curl -s -o /dev/null -w '%{http_code} %{content_type}' "$BASE/llms.txt")"
+        check "index.md served as markdown" "200 text/markdown; charset=utf-8" \
+          "$(curl -s -o /dev/null -w '%{http_code} %{content_type}' "$BASE/index.md")"
+        check "stylesheet content-type" "text/css; charset=utf-8" \
+          "$(curl -s -o /dev/null -w '%{content_type}' "$BASE/assets/landing.css")"
+        check "landing script content-type" "application/javascript; charset=utf-8" \
+          "$(curl -s -o /dev/null -w '%{content_type}' "$BASE/assets/landing.js")"
+        curl -s "$BASE/" | grep -q "<h1" && echo "ok   homepage has an h1" \
+          || { echo "FAIL homepage has no h1"; fail=1; }
+        curl -s "$BASE/" | grep -q "Infinite" && echo "ok   h1 text survives extraction" \
+          || { echo "FAIL h1 hidden text missing"; fail=1; }
+        check "directory URL resolves" "200" \
+          "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/smarter-screening/")"
+        exit $fail
