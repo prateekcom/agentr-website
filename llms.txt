@@ -22,6 +22,7 @@ AgentR is built by Vibencode Private Limited (Sagar, Madhya Pradesh, India) and 
 
 ## Optional
 
+- [Blog](https://agentr.global/blog/): writing on hiring, screening, and the systems that read applications
 - [About](https://agentr.global/about/): why the team built it
 - [For investors](https://agentr.global/investors/): thesis, traction, and the round
 - [Privacy policy](https://agentr.global/privacy-policy/): including the AgentR Guard desktop-app section

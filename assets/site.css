@@ -156,6 +156,9 @@ h3.sub{font-size:19px;font-weight:800;letter-spacing:-.01em}
   border-left:2px solid var(--line);transition:color .2s,border-color .2s}
 .doc-split .toc a:hover{color:var(--text);border-left-color:var(--brass)}
 .doc-split .toc a.on{color:var(--accent);font-weight:700;border-left-color:var(--accent)}
+/* blog posts add their sub-headings to the rail, stepped in under their section
+   so the shape of the article is readable from the contents alone */
+.doc-split .toc li.toc-sub a{padding-left:30px;font-size:.92em}
 .doc-split .prose{max-width:none}
 @media(max-width:900px){
   .doc-split{grid-template-columns:1fr;gap:0}
@@ -484,6 +487,9 @@ a.card:hover h3{color:var(--accent)}
 .prose.article h2{font-size:clamp(24px,2.8vw,30px);margin-top:1.9em}
 .prose.article blockquote{margin:1.6em 0;font-size:1.2em;line-height:1.4}
 .prose.article .fignote{font-size:14.5px;color:var(--muted);font-style:italic}
+/* article bodies now come from the CMS, so the text is not vetted by hand. A long
+   unbroken run — most often a pasted URL — otherwise spills past the measure. */
+.prose.article{overflow-wrap:break-word}
 .prose.article figure{margin:2em 0}
 .prose.article figure img{width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .prose.article figcaption{margin-top:12px;font-size:14px;line-height:1.6;color:var(--muted)}
@@ -510,3 +516,181 @@ a.card:hover h3{color:var(--accent)}
 .viewcard p{color:var(--muted);font-size:15.5px;line-height:1.6;margin-top:12px;max-width:60ch}
 .vc-go{display:inline-block;margin-top:18px;font-size:14.5px;font-weight:700;color:var(--accent)}
 @media(max-width:820px){.viewcard{grid-template-columns:1fr;gap:18px}}
+
+/* ---------------- blog listing ----------------
+   The index carries more furniture than the rest of the site: topics, a lead
+   piece, a grid and a pager. All of it reuses the tokens above so it reads as
+   the same site, and every hover here is the same 4px lift the cards elsewhere
+   already use rather than a new idiom. */
+
+/* The site nav is styled off the bare element — `nav{position:fixed;height:var(--nav)}`
+   near the top of this file. Topics and the pager are in-page navigation and are
+   correctly <nav> too, so they inherit all of it and get pinned over the header.
+   Put them back in the flow before anything else. */
+.topics,.pager{position:static;height:auto;background:none;backdrop-filter:none;
+  box-shadow:none;z-index:auto}
+
+/* topics ------------------------------------------------- */
+/* the row is a filter, not content: a hairline sets it apart from what it filters */
+.topics{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 clamp(26px,4vh,38px);
+  padding-bottom:clamp(20px,3vh,28px);border-bottom:1px solid var(--line)}
+.topic{display:inline-flex;align-items:baseline;gap:7px;padding:8px 15px;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);
+  font-size:14px;font-weight:600;color:var(--muted);
+  transition:color .2s,border-color .2s,background .2s}
+.topic span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;
+  color:var(--brass-deep);font-weight:400}
+/* colour and border only. These sit in a tight row, and lifting them made the
+   whole strip twitch as the pointer crossed it. */
+.topic:hover{color:var(--text);border-color:var(--brass)}
+.topic.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.topic.on span{color:rgba(255,255,255,.72)}
+
+/* the ground --------------------------------------------
+   Cards on flat cream read as a wall. The landing page already sits its hero on
+   graph paper — same dot, same 26px pitch (see .hero-bg in landing.css) — so the
+   listing borrows it and the cards become things laid out on a desk. The two
+   linear-gradients fade the grid back into the paper at the top and bottom
+   rather than letting it stop on a hard edge. */
+.listing-ground{
+  background-image:
+    linear-gradient(180deg,var(--paper) 0,transparent 120px),
+    linear-gradient(0deg,var(--paper) 0,transparent 140px),
+    radial-gradient(circle,rgba(23,20,37,.05) 1px,transparent 1.4px);
+  background-size:auto,auto,26px 26px}
+
+/* the lead piece ----------------------------------------- */
+/* The card is clipped to its own radius, so the tape that overhangs its edge has
+   to live on a wrapper. Named .leadcard, not .lead: .lead is already this site's
+   lead-paragraph class, used 26 times across ten pages, and claiming it here put
+   position:relative on every one of them. */
+.leadcard{position:relative}
+/* the same brass washi tape the use-case hero cards are pinned up with
+   (.hvis-tape). Set off to the left rather than centred: over a card this wide,
+   centred reads as a label, off-centre reads as someone having put it there. */
+.leadcard .tape{position:absolute;top:-11px;left:clamp(26px,7%,86px);z-index:2;
+  width:74px;height:25px;border-radius:2px;transform:rotate(-3deg);
+  background:rgba(168,130,59,.22);border:1px solid rgba(168,130,59,.3)}
+/* The image column is capped rather than fluid. Left to share the width evenly,
+   a square illustration set the card's height from its own width — 537px tall on
+   a 1440px screen, taller than the entire list beneath it. A bounded column and
+   a fixed 4:3 crop keep the lead card roughly a third of the page whatever the
+   window does. */
+.feature{display:grid;grid-template-columns:minmax(0,clamp(250px,34%,400px)) minmax(0,1fr);
+  align-items:stretch;gap:0;background:var(--card);border:1px solid var(--line);
+  border-radius:22px;overflow:hidden;color:inherit;box-shadow:var(--shadow-sm);
+  transition:transform .3s,box-shadow .3s}
+.feature:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.feature-img{overflow:hidden;background:var(--accent-tint);aspect-ratio:4/3}
+.feature-img img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s ease}
+.feature:hover .feature-img img{transform:scale(1.04)}
+.feature-body{padding:clamp(20px,2.4vw,32px);display:flex;flex-direction:column;
+  justify-content:center}
+.eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--brass-deep)}
+.feature h2{font-size:clamp(21px,2.1vw,27px);font-weight:800;letter-spacing:-.022em;
+  line-height:1.18;margin-top:11px;transition:color .2s}
+.feature:hover h2{color:var(--accent)}
+.feature p{color:var(--muted);font-size:15.5px;line-height:1.6;margin-top:11px;
+  max-width:56ch}
+.feature-meta{margin-top:15px;font-family:'DM Mono',ui-monospace,monospace;
+  font-size:11.5px;color:var(--muted)}
+
+/* the break between the lead piece and the rest ----------
+   Without it the page is one undifferentiated wall of cards: the lead reads as
+   just a bigger card rather than a choice someone made. A handwritten label in
+   the same Caveat as .kicker, with the rule running off to the right, marks the
+   shift and gives the eye somewhere to rest. */
+.listsplit{display:flex;align-items:center;gap:18px;
+  margin:clamp(38px,5vh,58px) 0 clamp(4px,1vh,10px)}
+.listsplit span{font-family:'Caveat',cursive;font-weight:600;font-size:23px;
+  color:var(--brass-deep);transform:rotate(-1.2deg);white-space:nowrap}
+.listsplit::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* the index ----------------------------------------------
+   Cards repeated down a page turn into wallpaper, and with the art matched by
+   category several would repeat outright. A dense index of date / category /
+   title scans far better, and the drawing moves to a single panel that follows
+   you down the list — one picture at a time, always the one you are pointing at. */
+.index{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,280px);
+  gap:clamp(26px,3.4vw,50px);align-items:start;margin-top:clamp(10px,2vh,18px)}
+.rows{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.rows li{border-bottom:1px solid var(--line)}
+.rows a{display:grid;grid-template-columns:96px 122px minmax(0,1fr);
+  align-items:baseline;gap:16px;padding:17px 10px 17px 4px;
+  transition:background .2s,padding-left .2s}
+.rows a:hover,.rows a:focus-visible{background:var(--card);padding-left:12px}
+.row-date,.row-cat{font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;
+  letter-spacing:.03em;color:var(--muted);white-space:nowrap}
+.row-cat{color:var(--brass-deep)}
+.row-title{font-size:17px;font-weight:700;letter-spacing:-.012em;line-height:1.35;
+  transition:color .2s}
+.rows a:hover .row-title,.rows a:focus-visible .row-title{color:var(--accent)}
+
+/* the panel that follows the list.
+   `position:sticky` with `align-self:start` is what makes it travel: the grid
+   would otherwise stretch it to the column's full height and it would never
+   move. */
+.indexart{position:sticky;top:calc(var(--nav) + 34px);align-self:start}
+.indexart-in{position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+/* Every drawing is in the DOM and cross-faded, rather than one <img> whose src
+   is swapped. Swapping would show a blank frame on first hover of each row
+   while the file fetches, which is exactly when it is being looked at. */
+.indexart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .32s ease}
+.indexart img.on{opacity:1}
+.indexart-note{margin-top:14px;font-family:'Caveat',cursive;font-weight:600;
+  font-size:19px;color:var(--brass-deep);transform:rotate(-1.2deg);
+  display:inline-block}
+
+@media(max-width:1040px) and (min-width:901px){
+  /* the title needs the room more than the category does */
+  .rows a{grid-template-columns:92px minmax(0,1fr)}
+  .row-cat{display:none}
+}
+@media(max-width:900px){
+  /* the panel is decorative and needs a pointer to mean anything */
+  .index{grid-template-columns:1fr}
+  .indexart{display:none}
+  /* date and category are both small mono and belong on one line: stacked, each
+     row ran to 103px and eight of them pushed the list off the screen */
+  .rows a{grid-template-columns:auto minmax(0,1fr);
+    grid-template-areas:"date cat" "title title";
+    gap:3px 12px;padding:15px 4px}
+  .row-date{grid-area:date}
+  .row-cat{grid-area:cat}
+  .row-title{grid-area:title;font-size:16.5px;margin-top:3px}
+}
+@media(prefers-reduced-motion:reduce){
+  .rows a,.row-title,.indexart img{transition:none}
+}
+
+/* pager -------------------------------------------------- */
+.pager{display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:clamp(36px,5vh,56px);flex-wrap:wrap}
+.pager a,.pager span{min-width:40px;height:40px;display:inline-flex;
+  align-items:center;justify-content:center;padding:0 13px;border-radius:11px;
+  font-size:14.5px;font-weight:600;color:var(--muted);border:1px solid transparent;
+  transition:color .2s,background .2s,border-color .2s}
+.pager a:hover{color:var(--text);background:var(--card);border-color:var(--line)}
+.pager .on{background:var(--accent);color:#fff;font-weight:700}
+.pager .gap{color:var(--muted);opacity:.5;min-width:22px;padding:0}
+.pager .edge{font-family:'DM Mono',ui-monospace,monospace;font-size:12.5px}
+
+/* an empty topic should say so rather than showing a blank grid */
+.emptynote{margin-top:34px;color:var(--muted);font-size:16.5px}
+
+/* keyboard users get the same affordance the mouse does */
+.topic:focus-visible,.feature:focus-visible,.rows a:focus-visible,
+.pager a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media(max-width:760px){
+  .feature{grid-template-columns:1fr}
+  .feature-img{min-height:0;aspect-ratio:16/9}
+}
+@media(prefers-reduced-motion:reduce){
+  .topic,.feature,.pager a,.go-arrow,.feature-img img{transition:none}
+  .feature:hover .feature-img img{transform:none}
+}

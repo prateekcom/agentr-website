@@ -3,3 +3,11 @@
 .DS_Store
 .claude/
 !404.html
+
+# Agent tooling, local only
+.agents/
+skills-lock.json
+node_modules/
+
+# scratch output from scripts/test-listing.mjs
+_designpreview/

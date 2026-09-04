@@ -1,0 +1,307 @@
+[
+  {
+    "name": "application",
+    "ground": "violet",
+    "topics": [
+      "application",
+      "resume",
+      "cv",
+      "applicant",
+      "candidate"
+    ]
+  },
+  {
+    "name": "volume",
+    "ground": "brass",
+    "topics": [
+      "volume",
+      "scale",
+      "backlog",
+      "throughput",
+      "pile"
+    ]
+  },
+  {
+    "name": "role",
+    "ground": "deep",
+    "topics": [
+      "role",
+      "job description",
+      "jd",
+      "requirements",
+      "brief"
+    ]
+  },
+  {
+    "name": "sourcing",
+    "ground": "lilac",
+    "topics": [
+      "sourcing",
+      "pipeline",
+      "inbound",
+      "job board"
+    ]
+  },
+  {
+    "name": "talent-pool",
+    "ground": "violet",
+    "topics": [
+      "talent pool",
+      "database",
+      "ats",
+      "archive"
+    ]
+  },
+  {
+    "name": "screening",
+    "ground": "brass",
+    "topics": [
+      "screening",
+      "funnel",
+      "filter",
+      "sifting"
+    ]
+  },
+  {
+    "name": "verification",
+    "ground": "deep",
+    "topics": [
+      "verification",
+      "claims",
+      "evidence",
+      "bgv",
+      "background"
+    ]
+  },
+  {
+    "name": "rubric",
+    "ground": "lilac",
+    "topics": [
+      "rubric",
+      "criteria",
+      "scorecard",
+      "structured"
+    ]
+  },
+  {
+    "name": "shortlist",
+    "ground": "violet",
+    "topics": [
+      "shortlist",
+      "ranking",
+      "ranked",
+      "signals"
+    ]
+  },
+  {
+    "name": "calibration",
+    "ground": "brass",
+    "topics": [
+      "calibration",
+      "consistency",
+      "agreement"
+    ]
+  },
+  {
+    "name": "fairness",
+    "ground": "deep",
+    "topics": [
+      "fairness",
+      "bias",
+      "equity",
+      "same standard",
+      "inclusion"
+    ]
+  },
+  {
+    "name": "interview",
+    "ground": "lilac",
+    "topics": [
+      "interview",
+      "conversation",
+      "screen call"
+    ]
+  },
+  {
+    "name": "questions",
+    "ground": "violet",
+    "topics": [
+      "questions",
+      "prompts",
+      "script"
+    ]
+  },
+  {
+    "name": "panel",
+    "ground": "brass",
+    "topics": [
+      "panel",
+      "hiring team",
+      "committee",
+      "debrief"
+    ]
+  },
+  {
+    "name": "notes",
+    "ground": "deep",
+    "topics": [
+      "notes",
+      "transcript",
+      "record",
+      "writing"
+    ]
+  },
+  {
+    "name": "scheduling",
+    "ground": "lilac",
+    "topics": [
+      "scheduling",
+      "calendar",
+      "slots",
+      "availability"
+    ]
+  },
+  {
+    "name": "speed",
+    "ground": "violet",
+    "topics": [
+      "speed",
+      "time to hire",
+      "faster",
+      "delay"
+    ]
+  },
+  {
+    "name": "compensation",
+    "ground": "brass",
+    "topics": [
+      "compensation",
+      "salary",
+      "cost",
+      "budget",
+      "pricing"
+    ]
+  },
+  {
+    "name": "judgment",
+    "ground": "deep",
+    "topics": [
+      "judgment",
+      "decision",
+      "hiring",
+      "people"
+    ]
+  },
+  {
+    "name": "offer",
+    "ground": "lilac",
+    "topics": [
+      "offer",
+      "accepted",
+      "closing",
+      "hired"
+    ]
+  },
+  {
+    "name": "declined",
+    "ground": "violet",
+    "topics": [
+      "rejection",
+      "declined",
+      "dropout",
+      "ghosting"
+    ]
+  },
+  {
+    "name": "onboarding",
+    "ground": "brass",
+    "topics": [
+      "onboarding",
+      "first day",
+      "induction",
+      "new hire"
+    ]
+  },
+  {
+    "name": "referral",
+    "ground": "deep",
+    "topics": [
+      "referral",
+      "network",
+      "recommendation"
+    ]
+  },
+  {
+    "name": "privacy",
+    "ground": "lilac",
+    "topics": [
+      "privacy",
+      "security",
+      "data",
+      "consent",
+      "transparency"
+    ]
+  },
+  {
+    "name": "timeline",
+    "ground": "violet",
+    "topics": [
+      "timeline",
+      "career",
+      "history",
+      "trajectory"
+    ]
+  },
+  {
+    "name": "skills",
+    "ground": "brass",
+    "topics": [
+      "skills",
+      "competency",
+      "capability",
+      "keywords"
+    ]
+  },
+  {
+    "name": "credentials",
+    "ground": "deep",
+    "topics": [
+      "credentials",
+      "education",
+      "degree",
+      "certificate"
+    ]
+  },
+  {
+    "name": "bots",
+    "ground": "lilac",
+    "topics": [
+      "ai",
+      "bots",
+      "cheating",
+      "integrity",
+      "llm",
+      "machines"
+    ]
+  },
+  {
+    "name": "reasoning",
+    "ground": "violet",
+    "topics": [
+      "reasoning",
+      "explainability",
+      "why",
+      "evidence trail"
+    ]
+  },
+  {
+    "name": "human-in-loop",
+    "ground": "brass",
+    "topics": [
+      "human",
+      "oversight",
+      "auto-reject",
+      "accountability"
+    ]
+  }
+]
