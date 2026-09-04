@@ -11,3 +11,6 @@ node_modules/
 
 # scratch output from scripts/test-listing.mjs
 _designpreview/
+
+# one-off import artefact
+blogs-import.ndjson

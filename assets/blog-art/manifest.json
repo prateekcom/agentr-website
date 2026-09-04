@@ -6,8 +6,7 @@
       "application",
       "resume",
       "cv",
-      "applicant",
-      "candidate"
+      "applicant"
     ]
   },
   {
@@ -29,7 +28,9 @@
       "job description",
       "jd",
       "requirements",
-      "brief"
+      "brief",
+      "ghost job",
+      "vacancy"
     ]
   },
   {
@@ -49,7 +50,9 @@
       "talent pool",
       "database",
       "ats",
-      "archive"
+      "archive",
+      "fresher",
+      "graduate"
     ]
   },
   {
@@ -70,7 +73,12 @@
       "claims",
       "evidence",
       "bgv",
-      "background"
+      "background",
+      "overemployment",
+      "moonlighting",
+      "fake",
+      "deepfake",
+      "impersonation"
     ]
   },
   {
@@ -90,7 +98,8 @@
       "shortlist",
       "ranking",
       "ranked",
-      "signals"
+      "signals",
+      "match score"
     ]
   },
   {
@@ -179,7 +188,8 @@
       "salary",
       "cost",
       "budget",
-      "pricing"
+      "pricing",
+      "roi"
     ]
   },
   {
@@ -188,8 +198,8 @@
     "topics": [
       "judgment",
       "decision",
-      "hiring",
-      "people"
+      "call",
+      "discretion"
     ]
   },
   {
@@ -207,6 +217,7 @@
     "ground": "violet",
     "topics": [
       "rejection",
+      "rejected",
       "declined",
       "dropout",
       "ghosting"
@@ -228,7 +239,10 @@
     "topics": [
       "referral",
       "network",
-      "recommendation"
+      "recommendation",
+      "boomerang",
+      "alumni",
+      "rehire"
     ]
   },
   {
@@ -239,7 +253,10 @@
       "security",
       "data",
       "consent",
-      "transparency"
+      "transparency",
+      "law",
+      "regulation",
+      "compliance"
     ]
   },
   {
@@ -281,7 +298,8 @@
       "cheating",
       "integrity",
       "llm",
-      "machines"
+      "machines",
+      "arms race"
     ]
   },
   {

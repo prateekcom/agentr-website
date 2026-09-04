@@ -114,10 +114,11 @@ check('weeks', humanDate('2026-08-10T09:00:00Z', now), '3 weeks ago')
 check('older falls back to a real date', humanDate('2026-01-10T09:00:00Z', now), '10 January 2026')
 
 // Art matching. Every one of these was a real bug before it was a test.
-const art = (cat, slug) =>
-  matchArt({slug, categories: cat ? [{title: cat, slug: cat.toLowerCase()}] : []}, manifest)
+const art = (cat, slug, title) =>
+  matchArt({slug, title, categories: cat ? [{title: cat, slug: cat.toLowerCase()}] : []}, manifest)
 
-check('category wins over slug', art('AI', 'the-offer-letter').how, 'category')
+check('title wins when it matches', art('AI', 'x', 'The offer letter nobody reads').how, 'title')
+check('category used when the title says nothing', art('AI', 'x').how, 'category')
 check('plural category finds singular topic', art('Candidates', 'x').name, 'application')
 check('plural slug word finds singular topic', art(null, 'available-roles-now').name, 'role')
 // "we-raised-a-round" contains the letters "ai"; substring matching illustrated

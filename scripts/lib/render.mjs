@@ -136,15 +136,17 @@ export function matchArt(post, manifest) {
     ...words(c?.slug),
   ])
 
-  const byCategory = manifest.find((m) => m.topics.some((t) => hasTopic(catWords, t)))
-  if (byCategory) return {name: byCategory.name, how: 'category'}
-
-  // Title before slug. Posts published by an agent through the MCP often carry no
-  // category at all — categories are references, and an agent has to look their
-  // ids up — but every post has a title, and it describes the subject better than
-  // a slug that may have been truncated.
+  // Title first. A category is a browsing bucket — six of them cover a whole
+  // blog — so matching on it hands the same drawing to every post in the bucket:
+  // on the real archive that was 9 distinct drawings across 27 posts, against 12
+  // from the titles. The title is the most specific description a post has, and
+  // it is also the one field an agent publishing through the MCP always sets,
+  // since categories are references whose ids it has to look up.
   const byTitle = manifest.find((m) => m.topics.some((t) => hasTopic(words(post.title), t)))
   if (byTitle) return {name: byTitle.name, how: 'title'}
+
+  const byCategory = manifest.find((m) => m.topics.some((t) => hasTopic(catWords, t)))
+  if (byCategory) return {name: byCategory.name, how: 'category'}
 
   const bySlug = manifest.find((m) => m.topics.some((t) => hasTopic(slugWords, t)))
   if (bySlug) return {name: bySlug.name, how: 'slug'}
