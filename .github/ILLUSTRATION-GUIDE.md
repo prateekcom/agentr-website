@@ -38,15 +38,17 @@ with it.
 | Stroke | `#171425` (ink) | Everything is drawn in ink. Colour lives in fills and marks |
 | Main stroke weight | `3.2` | `hair()` at `2.4` for ruled lines only |
 | Object fill | `#F5F2EC` (paper) | Objects are paper on a coloured ground |
-| Shading | `hatch()` — violet, gap 7, angle −41° | Exactly one element per drawing |
-| Annotation | `#A8823B` (brass) | Rings and arrows only |
+| Shading | none | Deliberately: there is no shading helper |
+| Second colour | none | Ink outline, paper fill, coloured ground. That is all |
 | Grounds | The four in `GROUNDS` | All normalised to lightness ~172 |
 
 **Do not add a ground colour without normalising it.** The four grounds are the
 brand inks mixed toward paper until they share one lightness. An un-normalised
 ground makes its drawing look heavier or more bleached than every neighbour, and
-these sit side by side. The formula is in `make-plates`-style luma mixing:
-`t = (172 − L(ink)) / (L(paper) − L(ink))`, then mix ink toward paper by `t`.
+these sit side by side. Mix the ink toward the paper by
+`t = (172 − L(ink)) / (L(paper) − L(ink))`, where `L` is Rec. 709 luma
+(`0.2126R + 0.7152G + 0.0722B`). `npm run check-art` fails if the four grounds
+drift more than 8 apart.
 
 ---
 
@@ -57,8 +59,9 @@ these sit side by side. The formula is in `make-plates`-style luma mixing:
 2. **Fill the middle, leave the edges.** Keep the drawing roughly within
    `x, y ∈ [110, 610]`. It gets cropped to a card and to 16:9 on a post banner.
 3. **Paper fill and ink outline only.** `solid()` for objects, `ink()`/`hair()`
-   for lines. Do not reach for `hatch()`, `ringMark()` or a brass colour — they
-   exist in the kit but are not the house style.
+   for lines. There is deliberately no shading helper and no brass pen: an
+   earlier pass added both, it made the set busy, and they were removed rather
+   than left in the kit as a temptation.
 4. **Ruled lines stand in for text.** Never draw letterforms — no real text ever
    appears in an illustration. The headline sits next to it on the page already.
 5. **Two depths**: ground, object. A `tick()`, `cross()` or `arrow()` in ink is
@@ -70,7 +73,7 @@ these sit side by side. The formula is in `make-plates`-style luma mixing:
 ### What to avoid
 
 - Gradients, shadows, opacity tricks — the style is flat ink on flat ground
-- Hatching or any second fill colour
+- Any second fill colour, or shading of any kind
 - Perspective or 3D
 - Faces or figures, except the deliberate hand in `judgment`
 - Anything that needs a caption to be understood
@@ -82,9 +85,9 @@ these sit side by side. The formula is in `make-plates`-style luma mixing:
 ```js
 import {
   PALETTE, GROUNDS, scene,          // palette + canvas
-  ink, hair, solid, hatch,          // pens
+  ink, hair, solid,                 // pens
   rect, line, circle, ellipse, poly, path,   // shapes
-  page, tick, cross, ringMark, arrow, crowd, // compounds
+  page, tick, cross, arrow, crowd,           // compounds
 } from './lib/art-kit.mjs'
 ```
 
@@ -95,7 +98,6 @@ import {
 | `ink(seed, w = 3.2)` | Outlines, structure |
 | `hair(seed, w = 2.4)` | Ruled lines, grid rules |
 | `solid(seed, fill = paper)` | A thing: outlined and filled |
-| `hatch(seed, fill = violet)` | The one shaded element |
 
 **Compounds** are shortcuts for things drawn often:
 
@@ -104,7 +106,6 @@ import {
 | `page(x, y, w, h, seed, {lines, head})` | A sheet with ruled text; `head: true` adds a heading block |
 | `tick(x, y, size, seed, colour)` | A two-stroke tick |
 | `cross(x, y, size, seed, colour)` | A cross |
-| `ringMark(cx, cy, d, seed, colour)` | A scribbled ring, roughness bumped to 2.1 |
 | `arrow(x1, y1, x2, y2, seed, colour)` | A drawn arrow with a head |
 | `crowd(points, seed, d)` | A scatter of small circles — applicants, claims |
 
@@ -120,8 +121,8 @@ import {
 function escalation(s) {
   return [
     page(190, 170, 240, 310, s, {lines: 4, head: true}),
-    rect(400, 240, 200, 190, hatch(s + 20, PALETTE.violet)),   // the one shaded thing
-    arrow(400, 520, 470, 448, s + 30, PALETTE.brass),          // the one mark
+    rect(392, 250, 196, 180, solid(s + 20)),   // the second object, same paper
+    arrow(400, 520, 470, 448, s + 30),         // ink, and only because it means something
   ].join('')
 }
 ```
@@ -145,13 +146,31 @@ adding a word to an existing motif beats adding a near-duplicate drawing.
 The build matches, in order:
 
 1. The post's **own banner image** in Sanity, if it has one — always wins
-2. Its **category** against each motif's `topics`
-3. Its **slug** against each motif's `topics`
-4. Failing all that, a **stable pick from the slug hash**, so a post always gets
+2. Its **title** against each motif's `topics`
+3. Its **category**
+4. Its **slug**
+5. Failing all that, a **stable pick from the slug hash**, so a post always gets
    the same drawing and never changes under a reader
 
-So the usual way to control a post's illustration is to give it the right
-category in Sanity — not to touch code.
+**Title before category**, deliberately. A category is a browsing bucket — six
+of them cover a whole blog — so matching on it first handed the same drawing to
+every post in the bucket: 9 distinct across 27 posts, against 19 from titles.
+The title is also the one field an agent publishing through the MCP always sets,
+since categories are references whose ids it has to look up.
+
+Two consequences worth knowing:
+
+- **Editing a title can change a post's picture.** Shortening one during the
+  import removed the word its match relied on, and it silently fell to the hash.
+  The build now prints any post that falls through, so it is caught rather than
+  shipped.
+- **A topic word must name a subject, not the domain.** "hiring", "candidate"
+  and "ai" are in most titles on this blog; adding them to a motif makes it
+  swallow a third of the archive. Matching is whole-word and lightly stemmed, so
+  "Interviews" finds `interview`, but `ai` will never match inside "raised".
+
+Order matters within `MOTIFS`: the first match wins, so a specific motif has to
+sit above a general one. That is why `cheating` and `fraud` precede `interview`.
 
 ---
 

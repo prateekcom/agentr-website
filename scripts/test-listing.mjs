@@ -180,6 +180,34 @@ const scriptBodies = [...p1.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].ma
 check('the swap needs no script', scriptBodies.some((b) => b.includes('indexart')), false)
 check('a style block carries the mapping instead', p1Style.length > 0, true)
 
+// The pager's ellipsis needs more than five pages. The live blog has three, and
+// the fixture above has three, so this path had never rendered — it would have
+// first appeared in production at roughly forty posts, which is a poor place to
+// discover it is wrong.
+const many = Array.from({length: 60}, (i0, i) => ({...posts[i % posts.length], slug: `many-${i}`}))
+const manyTotal = Math.ceil(many.length / PER_PAGE)
+const deepPage = renderListing({
+  posts: many.slice(3 * PER_PAGE, 4 * PER_PAGE),
+  allCount: many.length,
+  categories: CATS,
+  activeCategory: null,
+  pageNum: 4,
+  totalPages: manyTotal,
+  shallowChrome: shallow,
+  urlFor: null,
+  manifest,
+  depth: 3,
+  canonical: 'https://agentr.global/blog/page/4/',
+})
+check('60 posts make 7 pages', manyTotal, 7)
+check('an ellipsis appears past five pages', deepPage.includes('class="gap"'), true)
+check('page one stays reachable from deep in the pager', /">1<\/a>/.test(deepPage), true)
+check('the last page stays reachable', new RegExp(`">${manyTotal}<\/a>`).test(deepPage), true)
+check('the current page is still not a link',
+  deepPage.includes('<span class="on" aria-current="page">4</span>'), true)
+// Two gaps, not one: page 4 of 7 leaves a hole on each side.
+check('a gap on each side of the current page', (deepPage.match(/class="gap"/g) || []).length, 2)
+
 console.log(failures ? `\n${failures} FAILED` : '\nall passed')
 
 // Optional: dump two pages so the design can be looked at with a full grid.

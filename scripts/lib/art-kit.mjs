@@ -56,20 +56,6 @@ export const solid = (seed, fill = PALETTE.paper, strokeWidth = 3.2) => ({
   fillStyle: 'solid',
 })
 
-/**
- * Hatched fill. This is where detail comes from: shading reads as drawn, where
- * another flat shape would just read as another flat shape. Use it on the one
- * element the drawing is actually about.
- */
-export const hatch = (seed, fill = PALETTE.violet, strokeWidth = 3.2) => ({
-  ...ink(seed, strokeWidth),
-  fill,
-  fillStyle: 'hachure',
-  hachureGap: 7,
-  fillWeight: 1.7,
-  hachureAngle: -41,
-})
-
 /* ------------------------------------------------------------- emitting --- */
 function emit(drawable) {
   return gen
@@ -119,11 +105,6 @@ export function tick(x, y, size, seed, color = PALETTE.ink) {
 export function cross(x, y, size, seed, color = PALETTE.ink) {
   const o = {...ink(seed, 4.2), stroke: color}
   return line(x, y, x + size, y + size, o) + line(x + size, y, x, y + size, o)
-}
-
-/** A scribbled ring around something, the way you would circle it in pen. */
-export function ringMark(cx, cy, d, seed, color = PALETTE.brass) {
-  return circle(cx, cy, d, {...ink(seed, 3.4), stroke: color, roughness: 2.1})
 }
 
 /** A drawn arrow. */
