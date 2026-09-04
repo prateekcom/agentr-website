@@ -428,16 +428,39 @@ function humanInLoop(s) {
 }
 
 
-/** Someone presenting as someone else. */
-function impersonation(s) {
+/**
+ * Answers arriving from somewhere off-camera. The Cluely case: an overlay the
+ * interviewer cannot see, feeding the candidate lines in real time.
+ */
+function cheating(s) {
+  const out = [
+    // the call, as the interviewer sees it
+    rect(150, 176, 300, 240, solid(s)),
+    circle(300, 258, 92, solid(s + 1)),
+    path(`M 240 392 q 60 -66 120 0`, solid(s + 2)),
+  ]
+  // the panel they cannot see, overlapping the frame from outside it
+  out.push(rect(376, 300, 208, 156, solid(s + 10)))
+  for (let i = 0; i < 3; i++) {
+    out.push(line(404, 342 + i * 40, i === 2 ? 500 : 556, 342 + i * 40, hair(s + 20 + i)))
+  }
+  return out.join('')
+}
+
+/**
+ * A profile with nobody behind it. Two of the same card, and the photo never
+ * filled in — the fabricated candidate, and the operative who cleared every
+ * screen.
+ */
+function fraud(s) {
   return [
-    page(146, 186, 200, 292, s, {lines: 4, head: true}),
-    // a mask on a handle, held over the application behind it
-    ellipse(438, 322, 224, 286, solid(s + 20)),
-    ellipse(396, 296, 50, 28, ink(s + 21, 3)),
-    ellipse(482, 296, 50, 28, ink(s + 22, 3)),
-    path(`M 396 380 q 42 30 84 0`, ink(s + 23, 3.2)),
-    line(438, 466, 438, 566, ink(s + 24, 5)),
+    rect(212, 214, 226, 300, solid(s)),
+    rect(176, 178, 226, 300, solid(s + 1)),
+    circle(232, 244, 76, ink(s + 2, 3.4)),
+    line(198, 330, 380, 330, hair(s + 10)),
+    line(198, 372, 380, 372, hair(s + 11)),
+    line(198, 414, 316, 414, hair(s + 12)),
+    cross(206, 218, 52, s + 20),
   ].join('')
 }
 
@@ -472,6 +495,8 @@ export const MOTIFS = [
   {name: 'talent-pool', ground: 'violet', draw: talentPool, topics: ['talent pool', 'database', 'ats', 'archive', 'fresher', 'graduate']},
   {name: 'screening', ground: 'brass', draw: screening, topics: ['screening', 'funnel', 'filter', 'sifting']},
   {name: 'verification', ground: 'deep', draw: verification, topics: ['verification', 'claims', 'evidence', 'bgv', 'background', 'lied', 'honesty', 'embellishment', 'caught']},
+  {name: 'cheating', ground: 'deep', draw: cheating, topics: ['cheat', 'cheating', 'cluely', 'teleprompter', 'proxy', 'coaching']},
+  {name: 'fraud', ground: 'violet', draw: fraud, topics: ['fraud', 'fake', 'deepfake', 'impersonation', 'identity', 'operative', 'infiltration']},
   {name: 'rubric', ground: 'lilac', draw: rubric, topics: ['rubric', 'criteria', 'scorecard', 'structured']},
   {name: 'shortlist', ground: 'violet', draw: shortlist, topics: ['shortlist', 'ranking', 'ranked', 'signals', 'match score']},
   {name: 'calibration', ground: 'brass', draw: calibration, topics: ['calibration', 'consistency', 'agreement']},
@@ -492,9 +517,8 @@ export const MOTIFS = [
   {name: 'timeline', ground: 'violet', draw: timeline, topics: ['timeline', 'career', 'history', 'trajectory']},
   {name: 'skills', ground: 'brass', draw: skills, topics: ['skills', 'competency', 'capability', 'keywords']},
   {name: 'credentials', ground: 'deep', draw: credentials, topics: ['credentials', 'education', 'degree', 'certificate']},
-  {name: 'bots', ground: 'lilac', draw: bots, topics: ['ai', 'bots', 'cheating', 'integrity', 'llm', 'machines', 'arms race']},
+  {name: 'bots', ground: 'lilac', draw: bots, topics: ['ai', 'bots', 'integrity', 'llm', 'machines', 'arms race']},
   {name: 'reasoning', ground: 'violet', draw: reasoning, topics: ['reasoning', 'explainability', 'why', 'evidence trail']},
-  {name: 'impersonation', ground: 'deep', draw: impersonation, topics: ['impersonation', 'deepfake', 'fake', 'fraud', 'identity', 'operative', 'infiltration']},
   {name: 'moonlighting', ground: 'lilac', draw: moonlighting, topics: ['overemployment', 'moonlighting', 'two jobs', 'four jobs', 'second job']},
   {name: 'human-in-loop', ground: 'brass', draw: humanInLoop, topics: ['human', 'oversight', 'auto-reject', 'accountability']},
 ]

@@ -81,6 +81,31 @@
     ]
   },
   {
+    "name": "cheating",
+    "ground": "deep",
+    "topics": [
+      "cheat",
+      "cheating",
+      "cluely",
+      "teleprompter",
+      "proxy",
+      "coaching"
+    ]
+  },
+  {
+    "name": "fraud",
+    "ground": "violet",
+    "topics": [
+      "fraud",
+      "fake",
+      "deepfake",
+      "impersonation",
+      "identity",
+      "operative",
+      "infiltration"
+    ]
+  },
+  {
     "name": "rubric",
     "ground": "lilac",
     "topics": [
@@ -294,7 +319,6 @@
     "topics": [
       "ai",
       "bots",
-      "cheating",
       "integrity",
       "llm",
       "machines",
@@ -309,19 +333,6 @@
       "explainability",
       "why",
       "evidence trail"
-    ]
-  },
-  {
-    "name": "impersonation",
-    "ground": "deep",
-    "topics": [
-      "impersonation",
-      "deepfake",
-      "fake",
-      "fraud",
-      "identity",
-      "operative",
-      "infiltration"
     ]
   },
   {

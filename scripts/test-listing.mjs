@@ -128,7 +128,11 @@ const art = (cat, slug, title) =>
 
 check('title wins when it matches', art('AI', 'x', 'The offer letter nobody reads').how, 'title')
 check('category used when the title says nothing', art('AI', 'x').how, 'category')
-check('plural category finds singular topic', art('Candidates', 'x').name, 'application')
+// Exercises the stemmer, not a particular word: "Interviews" has to find the
+// "interview" topic. It used to assert Candidates -> application, which broke
+// when "candidate" was dropped as too greedy a match for titles on a hiring
+// blog — the stemmer was fine, the vocabulary had moved.
+check('plural category finds singular topic', art('Interviews', 'x').name, 'interview')
 check('plural slug word finds singular topic', art(null, 'available-roles-now').name, 'role')
 // "we-raised-a-round" contains the letters "ai"; substring matching illustrated
 // an announcement with the bots drawing.
