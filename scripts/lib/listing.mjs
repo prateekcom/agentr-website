@@ -210,16 +210,21 @@ export function renderListing(opts) {
   const lead = pageNum === 1 && !activeCategory && posts.length ? posts[0] : null
   const rest = lead ? posts.slice(1) : posts
 
-  const heading = activeCategory
-    ? `<h1>${esc(activeCategory.title)}, <span class="serif">and what we make of it.</span></h1>`
-    : `<h1>Writing on hiring, <span class="serif">and the machines doing it.</span></h1>`
-  const lede = activeCategory
-    ? esc(activeCategory.description || `Everything we have written on ${activeCategory.title.toLowerCase()}.`)
-    : 'What we are learning building a system that reads every application, and what it means for the people on both sides of the process.'
+  // The masthead is identical on every listing page, topic pages included.
+  // Varying it made the header collapse from two lines to one when you picked a
+  // topic — 45 characters of headline down to 30, 131 of standfirst down to 41 —
+  // so the chips and everything under them jumped up the page mid-click. Which
+  // topic is active is already said by the chip, which carries aria-current.
+  const heading = `<h1>Writing on hiring, <span class="serif">and the machines doing it.</span></h1>`
+  const lede =
+    'What we are learning building a system that reads every application, and what it means for the people on both sides of the process.'
+  // The topic rides in the kicker instead: one line whether or not it is there,
+  // so it names the page without moving anything.
+  const kicker = activeCategory ? `our views &middot; ${esc(activeCategory.title)}` : 'our views'
 
   const body =
     `<header class="phead wrap">\n` +
-    `  <span class="kicker">our views</span>\n` +
+    `  <span class="kicker">${kicker}</span>\n` +
     `  ${heading}\n` +
     `  <p class="lede">${lede}</p>\n` +
     `</header>\n\n` +

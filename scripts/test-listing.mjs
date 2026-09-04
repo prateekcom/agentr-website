@@ -102,7 +102,16 @@ const topicPage = render(1, CATS[0])
 check('topic page has no lead card', count(topicPage, /class="feature"/g), 0)
 check('topic page lists only that topic', rows(topicPage), 8)
 check('topic page marks its own chip', /class="topic on"[^>]*>Hiring/.test(topicPage), true)
-check('topic page uses the category description', topicPage.includes('On how hiring works.'), true)
+// The masthead is deliberately identical on every listing page: varying it made
+// the header collapse from two lines to one when a topic was picked, so the
+// chips jumped up the page mid-click.
+const headerOf = (html) => html.slice(html.indexOf('<header class="phead wrap">'), html.indexOf('</header>'))
+check('topic page keeps the same headline', headerOf(topicPage).includes('Writing on hiring,'), true)
+check('topic page keeps the same standfirst',
+  headerOf(topicPage).includes('What we are learning building a system'), true)
+check('topic is named in the kicker instead', headerOf(topicPage).includes('our views &middot; Hiring'), true)
+check('the plain index kicker carries no topic', headerOf(p1).includes('>our views<'), true)
+check('header markup is byte-identical across pages', headerOf(p1) === headerOf(p2), true)
 
 // Human dates.
 const now = new Date('2026-09-04T12:00:00Z')

@@ -439,7 +439,7 @@ export const MOTIFS = [
   {name: 'sourcing', ground: 'lilac', draw: sourcing, topics: ['sourcing', 'pipeline', 'inbound', 'job board']},
   {name: 'talent-pool', ground: 'violet', draw: talentPool, topics: ['talent pool', 'database', 'ats', 'archive', 'fresher', 'graduate']},
   {name: 'screening', ground: 'brass', draw: screening, topics: ['screening', 'funnel', 'filter', 'sifting']},
-  {name: 'verification', ground: 'deep', draw: verification, topics: ['verification', 'claims', 'evidence', 'bgv', 'background', 'overemployment', 'moonlighting', 'fake', 'deepfake', 'impersonation']},
+  {name: 'verification', ground: 'deep', draw: verification, topics: ['verification', 'claims', 'evidence', 'bgv', 'background', 'overemployment', 'moonlighting', 'fake', 'deepfake', 'impersonation', 'lied', 'honesty', 'embellishment']},
   {name: 'rubric', ground: 'lilac', draw: rubric, topics: ['rubric', 'criteria', 'scorecard', 'structured']},
   {name: 'shortlist', ground: 'violet', draw: shortlist, topics: ['shortlist', 'ranking', 'ranked', 'signals', 'match score']},
   {name: 'calibration', ground: 'brass', draw: calibration, topics: ['calibration', 'consistency', 'agreement']},
