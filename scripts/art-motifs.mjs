@@ -427,6 +427,38 @@ function humanInLoop(s) {
   ].join('')
 }
 
+
+/** Someone presenting as someone else. */
+function impersonation(s) {
+  return [
+    page(146, 186, 200, 292, s, {lines: 4, head: true}),
+    // a mask on a handle, held over the application behind it
+    ellipse(438, 322, 224, 286, solid(s + 20)),
+    ellipse(396, 296, 50, 28, ink(s + 21, 3)),
+    ellipse(482, 296, 50, 28, ink(s + 22, 3)),
+    path(`M 396 380 q 42 30 84 0`, ink(s + 23, 3.2)),
+    line(438, 466, 438, 566, ink(s + 24, 5)),
+  ].join('')
+}
+
+/** One person, several full-time roles, none of them told about the others. */
+function moonlighting(s) {
+  const out = [
+    circle(228, 286, 116, solid(s)),
+    path(`M 156 424 q 72 -74 144 0`, solid(s + 1)),
+  ]
+  ;[
+    [330, 176],
+    [360, 292],
+    [330, 408],
+  ].forEach(([x, y], i) => {
+    out.push(rect(x, y, 196, 104, solid(s + 10 + i)))
+    out.push(line(x + 24, y + 38, x + 150, y + 38, hair(s + 20 + i)))
+    out.push(line(x + 24, y + 70, x + 112, y + 70, hair(s + 30 + i)))
+  })
+  return out.join('')
+}
+
 /**
  * `topics` decides which drawing a post gets: the build matches a post's
  * category, then its slug, against these words. Add words rather than adding
@@ -439,7 +471,7 @@ export const MOTIFS = [
   {name: 'sourcing', ground: 'lilac', draw: sourcing, topics: ['sourcing', 'pipeline', 'inbound', 'job board']},
   {name: 'talent-pool', ground: 'violet', draw: talentPool, topics: ['talent pool', 'database', 'ats', 'archive', 'fresher', 'graduate']},
   {name: 'screening', ground: 'brass', draw: screening, topics: ['screening', 'funnel', 'filter', 'sifting']},
-  {name: 'verification', ground: 'deep', draw: verification, topics: ['verification', 'claims', 'evidence', 'bgv', 'background', 'overemployment', 'moonlighting', 'fake', 'deepfake', 'impersonation', 'lied', 'honesty', 'embellishment']},
+  {name: 'verification', ground: 'deep', draw: verification, topics: ['verification', 'claims', 'evidence', 'bgv', 'background', 'lied', 'honesty', 'embellishment', 'caught']},
   {name: 'rubric', ground: 'lilac', draw: rubric, topics: ['rubric', 'criteria', 'scorecard', 'structured']},
   {name: 'shortlist', ground: 'violet', draw: shortlist, topics: ['shortlist', 'ranking', 'ranked', 'signals', 'match score']},
   {name: 'calibration', ground: 'brass', draw: calibration, topics: ['calibration', 'consistency', 'agreement']},
@@ -462,5 +494,7 @@ export const MOTIFS = [
   {name: 'credentials', ground: 'deep', draw: credentials, topics: ['credentials', 'education', 'degree', 'certificate']},
   {name: 'bots', ground: 'lilac', draw: bots, topics: ['ai', 'bots', 'cheating', 'integrity', 'llm', 'machines', 'arms race']},
   {name: 'reasoning', ground: 'violet', draw: reasoning, topics: ['reasoning', 'explainability', 'why', 'evidence trail']},
+  {name: 'impersonation', ground: 'deep', draw: impersonation, topics: ['impersonation', 'deepfake', 'fake', 'fraud', 'identity', 'operative', 'infiltration']},
+  {name: 'moonlighting', ground: 'lilac', draw: moonlighting, topics: ['overemployment', 'moonlighting', 'two jobs', 'four jobs', 'second job']},
   {name: 'human-in-loop', ground: 'brass', draw: humanInLoop, topics: ['human', 'oversight', 'auto-reject', 'accountability']},
 ]

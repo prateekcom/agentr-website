@@ -139,7 +139,14 @@ function renderPost(post, chrome, urlFor, manifest) {
     bannerHtml = ''
   }
 
-  const kicker = post.kicker ? `\n  <span class="kicker">${esc(post.kicker)}</span>` : ''
+  // The kicker doubles as the way back, rather than a separate link beside it:
+  // two items sat on one line and read as one broken phrase, and "our views"
+  // already names where the reader came from. A post is often the first page
+  // someone lands on, from search or a shared link, and the nav has no Blog
+  // entry, so something in the header has to lead to the rest of them.
+  const kicker =
+    `<a class="kicker back" href="../">` +
+    `<span aria-hidden="true">&#8592;</span> ${esc(post.kicker || 'our views')}</a>`
   const authorName = (post.author && post.author.name) || 'AgentR'
 
   const {html: bodyHtml, headings} = withHeadingAnchors(bodyToHtml(post.body, urlFor))
@@ -171,8 +178,7 @@ function renderPost(post, chrome, urlFor, manifest) {
     // A post is often the first page someone lands on, from search or a shared
     // link, with no history to go back through. The nav carries no Blog entry,
     // so without this there is no route from an article to the rest of them.
-    `  <a class="backlink" href="../"><span>&#8592;</span> All writing</a>\n` +
-    `${kicker}\n` +
+    `  ${kicker}\n` +
     `  <h1>${esc(post.title)}</h1>\n` +
     `  <p class="lede">${esc(post.lede)}</p>\n` +
     `  <p class="byline">${esc(authorName)} &middot; ` +

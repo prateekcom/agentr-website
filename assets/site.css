@@ -610,13 +610,14 @@ a.card:hover h3{color:var(--accent)}
   color:var(--brass-deep);transform:rotate(-1.2deg);white-space:nowrap}
 .listsplit::after{content:"";flex:1;height:1px;background:var(--line)}
 
-/* back to the index, from a post ------------------------- */
-.backlink{display:inline-flex;align-items:center;gap:7px;
-  font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;letter-spacing:.05em;
-  color:var(--muted);margin-bottom:16px;transition:color .2s}
-.backlink:hover{color:var(--accent)}
-.backlink span{display:inline-block;transition:transform .2s}
-.backlink:hover span{transform:translateX(-4px)}
+/* back to the index, from a post -------------------------
+   The kicker doubles as the way back, so it stays the Caveat hand the rest of
+   the site uses for kickers and only gains an arrow. */
+.kicker.back{display:inline-flex;align-items:baseline;gap:9px;transition:color .2s}
+.kicker.back:hover{color:var(--accent)}
+.kicker.back span{display:inline-block;font-family:'DM Mono',ui-monospace,monospace;
+  font-size:17px;transition:transform .2s}
+.kicker.back:hover span{transform:translateX(-4px)}
 
 /* the index ----------------------------------------------
    Cards repeated down a page turn into wallpaper, and with the art matched by
@@ -693,7 +694,7 @@ a.card:hover h3{color:var(--accent)}
   .row-title{grid-area:title;font-size:16.5px;margin-top:3px}
 }
 @media(prefers-reduced-motion:reduce){
-  .rows a,.row-title,.indexart img,.backlink,.backlink span{transition:none}
+  .rows a,.row-title,.indexart img,.kicker.back,.kicker.back span{transition:none}
   .rows a:hover,.rows a:focus-visible{transform:none}
 }
 

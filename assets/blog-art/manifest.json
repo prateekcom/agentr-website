@@ -74,14 +74,10 @@
       "evidence",
       "bgv",
       "background",
-      "overemployment",
-      "moonlighting",
-      "fake",
-      "deepfake",
-      "impersonation",
       "lied",
       "honesty",
-      "embellishment"
+      "embellishment",
+      "caught"
     ]
   },
   {
@@ -313,6 +309,30 @@
       "explainability",
       "why",
       "evidence trail"
+    ]
+  },
+  {
+    "name": "impersonation",
+    "ground": "deep",
+    "topics": [
+      "impersonation",
+      "deepfake",
+      "fake",
+      "fraud",
+      "identity",
+      "operative",
+      "infiltration"
+    ]
+  },
+  {
+    "name": "moonlighting",
+    "ground": "lilac",
+    "topics": [
+      "overemployment",
+      "moonlighting",
+      "two jobs",
+      "four jobs",
+      "second job"
     ]
   },
   {
