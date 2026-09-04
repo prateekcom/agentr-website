@@ -99,33 +99,3 @@ document.querySelectorAll('.navdrop').forEach(function(dd){
   };
   document.head.appendChild(s);
 })();
-
-/* blog index: the drawing beside the list follows what you are pointing at.
-   Every illustration is already in the DOM (see .indexart) so this only toggles
-   a class — nothing is fetched mid-hover. Keyboard focus counts as pointing,
-   which is the whole reason this listens for focusin as well as mouseover. */
-(function(){
-  var rows = document.querySelector('.index .rows');
-  var panel = document.querySelector('.indexart');
-  if(!rows || !panel) return;
-  var arts = [].slice.call(panel.querySelectorAll('img'));
-  if(arts.length < 2) return;   /* one drawing cannot follow anything */
-
-  var current = null;
-  function show(name){
-    if(!name || name === current) return;   /* moving within a row must not re-fade */
-    current = name;
-    for(var i=0;i<arts.length;i++){
-      arts[i].classList.toggle('on', arts[i].getAttribute('data-art') === name);
-    }
-  }
-  function fromEvent(e){
-    var link = e.target && e.target.closest ? e.target.closest('a[data-art]') : null;
-    if(link) show(link.getAttribute('data-art'));
-  }
-  rows.addEventListener('mouseover', fromEvent);
-  rows.addEventListener('focusin', fromEvent);
-  /* deliberately no mouseleave reset: snapping back to the first drawing as the
-     pointer leaves the list is a flicker nobody asked for. The last one you
-     looked at stays. */
-})();

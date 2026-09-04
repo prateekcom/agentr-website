@@ -115,7 +115,23 @@ function artPanel(posts, ctx) {
       ` src="${ctx.up}assets/blog-art/${esc(n)}.svg" alt=""` +
       ` width="${ART_SQUARE}" height="${ART_SQUARE}" decoding="async" />`,
   )
+
+  // The row-to-drawing map, as CSS. Only the build knows which row points at
+  // which image, so the rules are emitted per page rather than living in
+  // site.css. Both selectors are more specific than the rule that hides the
+  // default, so the match wins without !important.
+  const rules = posts
+    .map((post, row) => {
+      const at = names.indexOf(artFor(post, ctx.manifest)) + 1
+      if (at < 1) return ''
+      const sel = (state) =>
+        `.index:has(.rows>li:nth-child(${row + 1})>a:${state}) .indexart img:nth-child(${at})`
+      return `${sel('hover')},${sel('focus-visible')}{opacity:1}`
+    })
+    .filter(Boolean)
+
   return (
+    `    <style>${rules.join('')}</style>\n` +
     `    <div class="indexart" aria-hidden="true">\n` +
     `      <div class="indexart-in">\n` +
     imgs.join('\n') +

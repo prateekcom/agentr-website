@@ -610,6 +610,14 @@ a.card:hover h3{color:var(--accent)}
   color:var(--brass-deep);transform:rotate(-1.2deg);white-space:nowrap}
 .listsplit::after{content:"";flex:1;height:1px;background:var(--line)}
 
+/* back to the index, from a post ------------------------- */
+.backlink{display:inline-flex;align-items:center;gap:7px;
+  font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;letter-spacing:.05em;
+  color:var(--muted);margin-bottom:16px;transition:color .2s}
+.backlink:hover{color:var(--accent)}
+.backlink span{display:inline-block;transition:transform .2s}
+.backlink:hover span{transform:translateX(-4px)}
+
 /* the index ----------------------------------------------
    Cards repeated down a page turn into wallpaper, and with the art matched by
    category several would repeat outright. A dense index of date / category /
@@ -621,8 +629,12 @@ a.card:hover h3{color:var(--accent)}
 .rows li{border-bottom:1px solid var(--line)}
 .rows a{display:grid;grid-template-columns:96px 122px minmax(0,1fr);
   align-items:baseline;gap:16px;padding:17px 10px 17px 4px;
-  transition:background .2s,padding-left .2s}
-.rows a:hover,.rows a:focus-visible{background:var(--card);padding-left:12px}
+  transition:background .2s,transform .2s}
+/* translate, not padding. Shifting the padding narrowed the title column by the
+   same 8px, so a headline sitting near a line break lost its last word to the
+   next line on hover and got it back on leave. A transform moves the row without
+   touching the layout, so nothing re-wraps. */
+.rows a:hover,.rows a:focus-visible{background:var(--card);transform:translateX(6px)}
 .row-date,.row-cat{font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;
   letter-spacing:.03em;color:var(--muted);white-space:nowrap}
 .row-cat{color:var(--brass-deep)}
@@ -644,6 +656,16 @@ a.card:hover h3{color:var(--accent)}
 .indexart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity .32s ease}
 .indexart img.on{opacity:1}
+/* Which drawing shows is decided in CSS, not script.
+   The JavaScript version worked in every test I could run and still did not
+   work on the machine that mattered, and I could not reproduce it — so the
+   dependency is gone rather than debugged. `:has()` lets the panel react to the
+   row under the pointer with nothing to load, cache, or run in the right order,
+   and it covers keyboard focus in the same rule. The row-to-image mapping is
+   emitted per page by scripts/lib/listing.mjs, since only the build knows which
+   row points at which drawing. */
+.index:has(.rows a:hover) .indexart img.on,
+.index:has(.rows a:focus-visible) .indexart img.on{opacity:0}
 .indexart-note{margin-top:14px;font-family:'Caveat',cursive;font-weight:600;
   font-size:19px;color:var(--brass-deep);transform:rotate(-1.2deg);
   display:inline-block}
@@ -671,7 +693,8 @@ a.card:hover h3{color:var(--accent)}
   .row-title{grid-area:title;font-size:16.5px;margin-top:3px}
 }
 @media(prefers-reduced-motion:reduce){
-  .rows a,.row-title,.indexart img{transition:none}
+  .rows a,.row-title,.indexart img,.backlink,.backlink span{transition:none}
+  .rows a:hover,.rows a:focus-visible{transform:none}
 }
 
 /* pager -------------------------------------------------- */

@@ -152,6 +152,30 @@ check('derived chrome repoints its links', deep2.nav.includes('="../../'), true)
 check('derived chrome leaves absolute urls alone',
   deep2.footer.includes('https://candidate.agentr.global/'), true)
 
+// The row-to-drawing map is emitted as CSS per page. It replaced a JavaScript
+// handler that passed every test here and still did not work on the machine that
+// mattered, so these assert the generated selectors rather than any behaviour.
+const styleOf = (html) => (html.match(/<style>([\s\S]*?)<\/style>/) || [, ''])[1]
+const p1Style = styleOf(p1)
+const p1Rows = [...p1.matchAll(/<li><a href[^>]*data-art="([^"]+)"/g)].map((m) => m[1])
+const p1Imgs = [...p1.matchAll(/<img[^>]*data-art="([^"]+)"/g)].map((m) => m[1])
+
+check('a rule is emitted for every row', (p1Style.match(/nth-child\(\d+\)>a:hover/g) || []).length, p1Rows.length)
+check('every rule covers keyboard focus too',
+  (p1Style.match(/:focus-visible/g) || []).length, p1Rows.length)
+// Row n must point at the image holding row n's drawing, or hovering shows the
+// wrong picture — the kind of off-by-one that looks like "it does not work".
+const mapOk = p1Rows.every((art, i) => {
+  const want = p1Imgs.indexOf(art) + 1
+  return p1Style.includes(`nth-child(${i + 1})>a:hover) .indexart img:nth-child(${want})`)
+})
+check('each row maps to its own drawing', mapOk, true)
+// addEventListener appears legitimately in the site chrome (GTM, scroll
+// restore), so pull each script out and check none of them drives the panel.
+const scriptBodies = [...p1.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1])
+check('the swap needs no script', scriptBodies.some((b) => b.includes('indexart')), false)
+check('a style block carries the mapping instead', p1Style.length > 0, true)
+
 console.log(failures ? `\n${failures} FAILED` : '\nall passed')
 
 // Optional: dump two pages so the design can be looked at with a full grid.

@@ -167,7 +167,12 @@ function renderPost(post, chrome, urlFor, manifest) {
       : article
 
   const body =
-    `<header class="phead wrap">${kicker}\n` +
+    `<header class="phead wrap">\n` +
+    // A post is often the first page someone lands on, from search or a shared
+    // link, with no history to go back through. The nav carries no Blog entry,
+    // so without this there is no route from an article to the rest of them.
+    `  <a class="backlink" href="../"><span>&#8592;</span> All writing</a>\n` +
+    `${kicker}\n` +
     `  <h1>${esc(post.title)}</h1>\n` +
     `  <p class="lede">${esc(post.lede)}</p>\n` +
     `  <p class="byline">${esc(authorName)} &middot; ` +
