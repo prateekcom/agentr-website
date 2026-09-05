@@ -83,7 +83,16 @@ ever switched to private, add a read token as the repository secret
 Go to https://agentr.sanity.studio → **Blog posts** → Create.
 
 Required: Title, URL (click Generate), Standfirst, Author, Publish date, Body.
-Recommended: a banner image of 1600x900 or larger, with alt text.
+
+**Leave the banner image empty.** The illustration is the default, not a
+fallback: the build picks a motif from the library by reading the title, so a
+post is illustrated the moment it is published and nobody has to make a picture.
+Uploading a banner *overrides* that and takes the post out of the house style —
+worth doing only when the post genuinely needs a specific photograph or chart.
+
+Because the match is read off the title, **the title is what chooses the
+picture**. Rewriting it can change the drawing. `.github/ILLUSTRATION-GUIDE.md`
+has the full matching order and the list of motifs.
 
 - A **future publish date** keeps the post off the site until that date, but only
   a build after that date will pick it up.
