@@ -2,10 +2,24 @@
 // has many posts and several topics, which no live build can reach yet.
 import {loadChrome} from './lib/template.mjs'
 import {renderListing, PER_PAGE, humanDate} from './lib/listing.mjs'
-import {loadArtManifest, matchArt} from './lib/render.mjs'
 import {chromeAtDepth} from './lib/template.mjs'
 
-const manifest = loadArtManifest()
+/** Stands in for Sanity's URL builder: chainable, and returns a stable URL. */
+const urlFor = (source) => {
+  const ref = (source && source.asset && source.asset._ref) || 'none'
+  const api = new Proxy(() => api, {get: (_, k) => (k === 'url' ? () => `https://cdn.test/${ref}` : () => api)})
+  return api
+}
+
+// Five drawings across 23 posts, so several rows share one and the panel has to
+// hold each distinct image once — the case the swap actually has to get right.
+const artRef = (i) => `image-${'abcde'[i % 5].repeat(8)}0000000000000000000000000000000-720x720-svg`
+const imageFor = (i) => ({
+  _type: 'image',
+  asset: {_type: 'reference', _ref: artRef(i)},
+  alt: 'Illustration: a test drawing.',
+  dimensions: {width: 720, height: 720},
+})
 
 const shallow = loadChrome()
 const CATS = [
@@ -22,6 +36,7 @@ const posts = Array.from({length: 23}, (i0, i) => ({
   featured: i === 4,
   author: {name: 'Prateek'},
   categories: [CATS[i % 3]],
+  mainImage: imageFor(i),
   body: [{_type: 'block', children: [{text: 'word '.repeat(400)}]}],
 }))
 
@@ -46,8 +61,7 @@ const render = (n, activeCategory = null) =>
     pageNum: n,
     totalPages: activeCategory ? 1 : totalPages,
     shallowChrome: shallow,
-    urlFor: null,
-    manifest,
+    urlFor,
     depth: activeCategory ? 3 : n === 1 ? 1 : 3,
     canonical: 'https://agentr.global/blog/',
     prevUrl: n > 1 ? 'https://agentr.global/blog/' : undefined,
@@ -122,28 +136,6 @@ check('last week', humanDate('2026-08-27T09:00:00Z', now), 'last week')
 check('weeks', humanDate('2026-08-10T09:00:00Z', now), '3 weeks ago')
 check('older falls back to a real date', humanDate('2026-01-10T09:00:00Z', now), '10 January 2026')
 
-// Art matching. Every one of these was a real bug before it was a test.
-const art = (cat, slug, title) =>
-  matchArt({slug, title, categories: cat ? [{title: cat, slug: cat.toLowerCase()}] : []}, manifest)
-
-check('title wins when it matches', art('AI', 'x', 'The offer letter nobody reads').how, 'title')
-check('category used when the title says nothing', art('AI', 'x').how, 'category')
-// Exercises the stemmer, not a particular word: "Interviews" has to find the
-// "interview" topic. It used to assert Candidates -> application, which broke
-// when "candidate" was dropped as too greedy a match for titles on a hiring
-// blog — the stemmer was fine, the vocabulary had moved.
-check('plural category finds singular topic', art('Interviews', 'x').name, 'interview')
-check('plural slug word finds singular topic', art(null, 'available-roles-now').name, 'role')
-// "we-raised-a-round" contains the letters "ai"; substring matching illustrated
-// an announcement with the bots drawing.
-check('short topics do not match inside words', art(null, 'we-raised-a-round').how, 'hash')
-// Topics are spaced, slugs are hyphenated; substring matching could never join them.
-check('multi-word topic matches a hyphenated slug', art(null, 'time-to-hire-is-a-lie').name, 'speed')
-check('unclaimed subject falls through to hash', art('Announcements', 'quarterly-update').how, 'hash')
-check('hash is stable for the same slug',
-  art(null, 'zzz-nothing-matches').name, art(null, 'zzz-nothing-matches').name)
-check('no art library yields no drawing', matchArt({slug: 'x'}, []).name, null)
-
 // Chrome sourcing. The blog used to read its two-deep shell from the single
 // article at views/when-everyone-is-using-bots/, so deleting one post would have
 // stopped the whole blog building.
@@ -194,8 +186,7 @@ const deepPage = renderListing({
   pageNum: 4,
   totalPages: manyTotal,
   shallowChrome: shallow,
-  urlFor: null,
-  manifest,
+  urlFor,
   depth: 3,
   canonical: 'https://agentr.global/blog/page/4/',
 })

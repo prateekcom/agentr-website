@@ -6,7 +6,6 @@ import {
   cardImageUrl,
   esc,
   formatDate,
-  artFor,
   ART_SQUARE,
   readingTime,
 } from './render.mjs'
@@ -36,7 +35,7 @@ function summaryOf(post) {
   return (post.seo && post.seo.metaDescription && post.seo.metaDescription.trim()) || post.lede
 }
 
-function cardImage(post, urlFor, {up, manifest}) {
+function cardImage(post, urlFor, {up}) {
   if (post.mainImage && post.mainImage.asset) {
     return (
       `<img src="${esc(cardImageUrl(urlFor, post.mainImage))}"` +
@@ -44,17 +43,8 @@ function cardImage(post, urlFor, {up, manifest}) {
       ` width="${CARD_W}" height="${CARD_H}" loading="lazy" decoding="async" />`
     )
   }
-  // No image of its own: fall back to its illustration. SVG, so one file serves
-  // every size and a nine-card listing stays a few KB.
-  const art = artFor(post, manifest)
-  if (art) {
-    return (
-      `<img src="${up}assets/blog-art/${art}.svg" alt=""` +
-      ` width="${ART_SQUARE}" height="${ART_SQUARE}" loading="lazy" decoding="async" />`
-    )
-  }
-  // No art library present either (nobody has run `npm run make-art`). Ship the
-  // site's default card rather than a broken image path.
+  // Every post is expected to carry its own drawing, uploaded with it. One that
+  // does not gets the site's default card rather than a broken image path.
   return `<img src="${up}assets/og-default.jpg" alt="" width="1200" height="630" loading="lazy" decoding="async" />`
 }
 
@@ -83,10 +73,33 @@ function featureCard(post, urlFor, ctx) {
   )
 }
 
+/**
+ * Identifies the drawing a row points at. Posts often share one, so the panel
+ * holds each distinct image once and several rows point at the same one. The
+ * asset id is the only thing that is stable across builds and unique per image.
+ */
+function artKey(post) {
+  const ref = post.mainImage && post.mainImage.asset && post.mainImage.asset._ref
+  return ref ? ref.replace(/^image-/, '').slice(0, 8) : null
+}
+
+/** The panel image for a post, at its natural size so nothing shifts on load. */
+function panelImage(post, ctx) {
+  const img = post.mainImage
+  if (!img || !img.asset) return null
+  const d = img.dimensions
+  return {
+    key: artKey(post),
+    src: cardImageUrl(ctx.urlFor, img),
+    w: (d && d.width) || ART_SQUARE,
+    h: (d && d.height) || ART_SQUARE,
+  }
+}
+
 /** One line of the index: when, what kind, what it is called. */
 function indexRow(post, ctx) {
   const cat = post.categories && post.categories[0]
-  const art = artFor(post, ctx.manifest)
+  const art = artKey(post)
   return (
     `      <li>` +
     `<a href="${ctx.postHref(post.slug)}"${art ? ` data-art="${esc(art)}"` : ''}>` +
@@ -107,14 +120,21 @@ function indexRow(post, ctx) {
  * and a screen reader stepping through the list should not hear it repeated.
  */
 function artPanel(posts, ctx) {
-  const names = [...new Set(posts.map((p) => artFor(p, ctx.manifest)).filter(Boolean))]
+  const seen = new Map()
+  for (const p of posts) {
+    const img = panelImage(p, ctx)
+    if (img && !seen.has(img.key)) seen.set(img.key, img)
+  }
+  const names = [...seen.keys()]
   if (!names.length) return ''
-  const imgs = names.map(
-    (n, i) =>
+  const imgs = names.map((n, i) => {
+    const img = seen.get(n)
+    return (
       `        <img${i === 0 ? ' class="on"' : ''} data-art="${esc(n)}"` +
-      ` src="${ctx.up}assets/blog-art/${esc(n)}.svg" alt=""` +
-      ` width="${ART_SQUARE}" height="${ART_SQUARE}" decoding="async" />`,
-  )
+      ` src="${esc(img.src)}" alt=""` +
+      ` width="${img.w}" height="${img.h}" decoding="async" />`
+    )
+  })
 
   // The row-to-drawing map, as CSS. Only the build knows which row points at
   // which image, so the rules are emitted per page rather than living in
@@ -122,7 +142,7 @@ function artPanel(posts, ctx) {
   // default, so the match wins without !important.
   const rules = posts
     .map((post, row) => {
-      const at = names.indexOf(artFor(post, ctx.manifest)) + 1
+      const at = names.indexOf(artKey(post)) + 1
       if (at < 1) return ''
       const sel = (state) =>
         `.index:has(.rows>li:nth-child(${row + 1})>a:${state}) .indexart img:nth-child(${at})`
@@ -205,7 +225,6 @@ export function renderListing(opts) {
     shallowChrome,
     urlFor,
     depth,
-    manifest = [],
     canonical,
     prevUrl,
     nextUrl,
@@ -214,7 +233,7 @@ export function renderListing(opts) {
   const up = '../'.repeat(depth)
   const ctx = {
     up,
-    manifest,
+    urlFor,
     allHref: `${up}${OUT_DIR}/`,
     postHref: (slug) => `${up}${OUT_DIR}/${slug}/`,
     topicHref: (slug) => `${up}${OUT_DIR}/topics/${slug}/`,

@@ -21,11 +21,6 @@ import {
   makeImageBuilder,
   plainText,
   readingTime,
-  ART_WIDE_H,
-  ART_WIDE_W,
-  artFor,
-  matchArt,
-  loadArtManifest,
   effectiveDims,
   scaleDims,
   withHeadingAnchors,
@@ -65,17 +60,33 @@ const POSTS_QUERY = `*[
   "categories": categories[]->{title, description, "slug": slug.current},
   mainImage{..., "dimensions": asset->metadata.dimensions},
   body[]{..., _type == "image" => {"dimensions": asset->metadata.dimensions}},
-  seo
+  seo{..., ogImage{..., "dimensions": asset->metadata.dimensions}}
 }`
 
+/** An SVG is served back unchanged: the CDN ignores width, fit and format on one. */
+const isSvg = (image) => /-svg$/.test((image && image.asset && image.asset._ref) || '')
+
+/**
+ * The banner wants a wide image. A photograph can simply be re-cropped by the
+ * CDN, but a drawn illustration is an SVG, and the CDN will not touch it — ask
+ * for 1200 wide and the 720x720 square comes back, which renders as a banner
+ * twice the height it should be.
+ *
+ * Its wide rendition therefore has to exist as its own asset, and it already
+ * does: the social image is the same drawing centred on a 1200x630 ground.
+ * So an SVG banner falls back to it, and everything else keeps the normal path.
+ */
 function bannerFor(post, urlFor) {
   if (!post.mainImage || !post.mainImage.asset) return null
+  const og = post.seo && post.seo.ogImage && post.seo.ogImage.asset ? post.seo.ogImage : null
+  const wide = isSvg(post.mainImage) && og ? og : post.mainImage
+
   return {
-    src: imageUrl(urlFor, post.mainImage, {width: 1600}),
-    og: imageUrl(urlFor, post.mainImage, {width: 1200}),
+    src: imageUrl(urlFor, wide, {width: 1600}),
+    og: imageUrl(urlFor, og || post.mainImage, {width: 1200}),
     alt: post.mainImage.alt || '',
     caption: post.mainImage.caption || '',
-    dims: scaleDims(effectiveDims(post.mainImage.dimensions, post.mainImage.crop), 1600),
+    dims: scaleDims(effectiveDims(wide.dimensions, wide.crop), 1600),
     cardDims: scaleDims(post.mainImage.dimensions, 760),
   }
 }
@@ -95,26 +106,17 @@ function modifiedAt(post) {
   return new Date(updated) > new Date(post.publishedAt) ? updated : post.publishedAt
 }
 
-function renderPost(post, chrome, urlFor, manifest) {
+function renderPost(post, chrome, urlFor) {
   const url = `${SITE}/${OUT_DIR}/${post.slug}/`
   const banner = bannerFor(post, urlFor)
   const description = (post.seo && post.seo.metaDescription && post.seo.metaDescription.trim()) || post.lede
   const title = (post.seo && post.seo.metaTitle && post.seo.metaTitle.trim()) || post.title
-  // A post with no image of its own is illustrated from the drawn library,
-  // matched on its category. Decorative by definition, hence the empty alt.
-  // Declared before ogImage, which reads it: a post that has an uploaded banner
-  // short-circuits before reaching it, so the wrong order only breaks the posts
-  // that need it most — every one imported without an image.
-  const art = artFor(post, manifest)
-
   const ogImage =
     post.seo && post.seo.ogImage && post.seo.ogImage.asset
       ? imageUrl(urlFor, post.seo.ogImage, {width: 1200})
       : banner
         ? banner.og
-        : art
-          ? `${SITE}/assets/blog-art/${art}-og.jpg`
-          : DEFAULT_OG
+        : DEFAULT_OG
   const mins = readingTime(post.body)
 
   let bannerHtml
@@ -127,15 +129,9 @@ function renderPost(post, chrome, urlFor, manifest) {
       `      <img src="${esc(banner.src)}" alt="${esc(banner.alt)}"${sizeAttrs(banner.dims)}` +
       ` fetchpriority="high" decoding="async" />${caption}\n` +
       `    </figure>\n`
-  } else if (art) {
-    bannerHtml =
-      `    <figure class="banner">\n` +
-      `      <img src="../../assets/blog-art/${art}-wide.svg" alt=""` +
-      ` width="${ART_WIDE_W}" height="${ART_WIDE_H}" fetchpriority="high" decoding="async" />\n` +
-      `    </figure>\n`
   } else {
-    // Neither an uploaded image nor an art library: a post reads fine with no
-    // banner at all, which beats emitting a path to a file that is not there.
+    // No image on the post. It reads fine without one, which beats emitting a
+    // path to a file that is not there.
     bannerHtml = ''
   }
 
@@ -315,7 +311,6 @@ async function main() {
   }
 
   const urlFor = makeImageBuilder(client)
-  const manifest = loadArtManifest()
 
   // Fail loudly rather than publishing a page Google would show with no snippet.
   for (const p of posts) {
@@ -337,7 +332,7 @@ async function main() {
   const broken = []
   for (const post of posts) {
     try {
-      rendered.push({post, html: renderPost(post, deep, urlFor, manifest)})
+      rendered.push({post, html: renderPost(post, deep, urlFor)})
     } catch (err) {
       broken.push({post, message: err.message})
     }
@@ -386,7 +381,6 @@ ${broken.length} post(s) could not be rendered:
         totalPages,
         shallowChrome: shallow,
         urlFor,
-        manifest,
         depth,
         canonical: `${SITE}/${rel}`,
         prevUrl: n > 1 ? `${SITE}/${OUT_DIR}/${n === 2 ? '' : `page/${n - 1}/`}` : undefined,
@@ -409,7 +403,6 @@ ${broken.length} post(s) could not be rendered:
         totalPages: 1,
         shallowChrome: shallow,
         urlFor,
-        manifest,
         depth: 3,
         canonical: `${SITE}/${rel}`,
       }),
@@ -426,21 +419,14 @@ ${broken.length} post(s) could not be rendered:
 
   console.log(`Built ${posts.length} post${posts.length === 1 ? '' : 's'} into /${OUT_DIR}/`)
   for (const p of posts) console.log(`  /${OUT_DIR}/${p.slug}/`)
-  // A post that fell through to the hash has a stable drawing but an arbitrary
-  // one, which almost always means its category has no topic word yet. Say so
-  // rather than letting it look deliberate.
-  const unmatched = posts
-    .filter((p) => !(p.mainImage && p.mainImage.asset))
-    .map((p) => ({post: p, ...matchArt(p, manifest)}))
-    .filter((m) => m.how === 'hash')
-  if (unmatched.length) {
-    console.log(`
-No motif claims the subject of ${unmatched.length} post(s) — art picked by hash:`)
-    for (const m of unmatched) {
-      const cats = (m.post.categories || []).map((c) => c.title).join(', ') || 'no category'
-      console.log(`  ${m.post.slug}  (${cats})  ->  ${m.name}`)
-    }
-    console.log('  Add a topic word in scripts/art-motifs.mjs to give these a deliberate drawing.')
+  // Every post is expected to arrive with its own drawing. One that does not
+  // still publishes — it just has no picture anywhere, which is worth saying
+  // out loud rather than leaving to be found on the live listing.
+  const bare = posts.filter((p) => !(p.mainImage && p.mainImage.asset))
+  if (bare.length) {
+    console.log(`\n${bare.length} post(s) have no illustration:`)
+    for (const p of bare) console.log(`  ${p.slug}`)
+    console.log('  Draw one with the agentr-illustrations toolkit and upload it in Sanity.')
   }
 
   console.log(`Listing pages: ${listingPages.length} (${totalPages} paged, ${categories.length} topic)`)
