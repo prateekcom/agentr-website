@@ -21,6 +21,7 @@ import {
   makeImageBuilder,
   plainText,
   readingTime,
+  slugPath,
   effectiveDims,
   scaleDims,
   withHeadingAnchors,
@@ -107,7 +108,7 @@ function modifiedAt(post) {
 }
 
 function renderPost(post, chrome, urlFor) {
-  const url = `${SITE}/${OUT_DIR}/${post.slug}/`
+  const url = `${SITE}/${OUT_DIR}/${slugPath(post.slug)}/`
   const banner = bannerFor(post, urlFor)
   const description = (post.seo && post.seo.metaDescription && post.seo.metaDescription.trim()) || post.lede
   const title = (post.seo && post.seo.metaTitle && post.seo.metaTitle.trim()) || post.title
@@ -246,7 +247,7 @@ function updateSitemap(posts, listingPages) {
       .filter((p) => !(p.seo && p.seo.noIndex))
       .map(
         (p) =>
-          `  <url><loc>${SITE}/${OUT_DIR}/${p.slug}/</loc>` +
+          `  <url><loc>${SITE}/${OUT_DIR}/${slugPath(p.slug)}/</loc>` +
           `<lastmod>${isoDate(p._updatedAt || p.publishedAt)}</lastmod></url>`,
       ),
   ].join('\n')

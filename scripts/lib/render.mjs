@@ -47,6 +47,17 @@ export function imageUrl(urlFor, source, {width = 1600, quality = 80} = {}) {
   return urlFor(source).width(width).quality(quality).auto('format').fit('max').url()
 }
 
+/**
+ * A slug as it may appear in a URL. Slugs carried over from the Framer blog hold
+ * characters a URL cannot: a curly apostrophe, an em dash. The directory on disk
+ * keeps them verbatim, because that is the path the URL resolves to, but every
+ * href, canonical, og:url and sitemap <loc> has to carry the encoded form — a
+ * raw U+2019 in a sitemap is not a valid URL and Google is under no obligation
+ * to guess. encodeURIComponent leaves the unreserved set alone, so an ordinary
+ * slug passes through untouched and only the awkward ones change.
+ */
+export const slugPath = (slug) => encodeURIComponent(String(slug || ''))
+
 /** The drawn illustrations are square; a post with no dimensions falls back to it. */
 export const ART_SQUARE = 720
 

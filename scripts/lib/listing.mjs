@@ -4,6 +4,7 @@ import {
   CARD_W,
   SITE,
   cardImageUrl,
+  slugPath,
   esc,
   formatDate,
   ART_SQUARE,
@@ -235,7 +236,7 @@ export function renderListing(opts) {
     up,
     urlFor,
     allHref: `${up}${OUT_DIR}/`,
-    postHref: (slug) => `${up}${OUT_DIR}/${slug}/`,
+    postHref: (slug) => `${up}${OUT_DIR}/${slugPath(slug)}/`,
     topicHref: (slug) => `${up}${OUT_DIR}/topics/${slug}/`,
     pageHref: (n) => (n === 1 ? `${up}${OUT_DIR}/` : `${up}${OUT_DIR}/page/${n}/`),
   }
@@ -296,7 +297,7 @@ export function renderListing(opts) {
     blogPost: posts.map((p) => ({
       '@type': 'BlogPosting',
       headline: p.title,
-      url: `${SITE}/${OUT_DIR}/${p.slug}/`,
+      url: `${SITE}/${OUT_DIR}/${slugPath(p.slug)}/`,
       datePublished: p.publishedAt.slice(0, 10),
       author: {'@type': 'Person', name: (p.author && p.author.name) || 'AgentR'},
     })),
