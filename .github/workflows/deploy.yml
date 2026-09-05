@@ -32,10 +32,17 @@ jobs:
         node-version: '22'
         cache: npm
 
-    # --omit=dev on purpose: geopattern, resvg and sharp only make the banner
-    # plates, which are committed as ordinary images. The deploy never regenerates
-    # them, so it should not spend time installing a native image toolchain.
+    # continue-on-error for the same reason the render step has it: before the
+    # blog existed this workflow had no build step at all, so nothing could fail
+    # ahead of the AWS steps. A registry blip must not stop a marketing change
+    # from shipping. If the install fails the render fails too, and the /blog/
+    # pages from the last good build are committed, so they publish again.
+    #
+    # --omit=dev because the drawing toolchain is not here any more: illustrations
+    # are made in agentr-illustrations and stored in Sanity. What is left is what
+    # build:blog actually needs — the Sanity client and the Portable Text renderer.
     - name: Install build dependencies
+      continue-on-error: true
       run: npm ci --omit=dev
 
     # continue-on-error, deliberately: the blog must not be able to take the site
