@@ -220,7 +220,7 @@ h3.sub{font-size:19px;font-weight:800;letter-spacing:-.01em}
 @media(max-width:900px){.tiers.two{grid-template-columns:1fr}}
 .tier{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;
   box-shadow:var(--shadow-sm);display:flex;flex-direction:column;height:100%}
-.tier.feature{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-md)}
+.tier.postcard{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-md)}
 .tier .tag{font-family:'DM Mono',ui-monospace,monospace;font-size:11.5px;color:var(--brass-deep)}
 .tier h3{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
 .tier .price{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;
@@ -580,27 +580,30 @@ a.card:hover h3{color:var(--accent)}
    a 1440px screen, taller than the entire list beneath it. A bounded column and
    a fixed 4:3 crop keep the lead card roughly a third of the page whatever the
    window does. */
-.feature{display:grid;grid-template-columns:minmax(0,clamp(250px,34%,400px)) minmax(0,1fr);
+/* .postcard, not .feature: the pricing page has carried <div class="tier feature">
+   since before this blog existed, and a bare .feature rule here laid that card
+   out as a grid and stretched its button to 483x385. */
+.postcard{display:grid;grid-template-columns:minmax(0,clamp(250px,34%,400px)) minmax(0,1fr);
   align-items:stretch;gap:0;background:var(--card);border:1px solid var(--line);
   border-radius:22px;overflow:hidden;color:inherit;box-shadow:var(--shadow-sm);
   transition:transform .3s,box-shadow .3s}
-.feature:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
-.feature-img{overflow:hidden;background:var(--accent-tint);aspect-ratio:4/3}
-.feature-img img{width:100%;height:100%;object-fit:cover;display:block;
+.postcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.postcard-img{overflow:hidden;background:var(--accent-tint);aspect-ratio:4/3}
+.postcard-img img{width:100%;height:100%;object-fit:cover;display:block;
   transition:transform .5s ease}
-.feature:hover .feature-img img{transform:scale(1.04)}
-.feature-body{padding:clamp(20px,2.4vw,32px);display:flex;flex-direction:column;
+.postcard:hover .postcard-img img{transform:scale(1.04)}
+.postcard-body{padding:clamp(20px,2.4vw,32px);display:flex;flex-direction:column;
   justify-content:center}
 .eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;
   letter-spacing:.08em;text-transform:uppercase;color:var(--brass-deep)}
-.feature h2{font-size:clamp(21px,2.1vw,27px);font-weight:800;letter-spacing:-.022em;
+.postcard h2{font-size:clamp(21px,2.1vw,27px);font-weight:800;letter-spacing:-.022em;
   line-height:1.18;margin-top:11px;transition:color .2s;
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
-.feature:hover h2{color:var(--accent)}
-.feature p{color:var(--muted);font-size:15.5px;line-height:1.6;margin-top:11px;
+.postcard:hover h2{color:var(--accent)}
+.postcard p{color:var(--muted);font-size:15.5px;line-height:1.6;margin-top:11px;
   max-width:56ch;
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
-.feature-meta{margin-top:15px;font-family:'DM Mono',ui-monospace,monospace;
+.postcard-meta{margin-top:15px;font-family:'DM Mono',ui-monospace,monospace;
   font-size:11.5px;color:var(--muted)}
 
 /* the break between the lead piece and the rest ----------
@@ -718,14 +721,14 @@ a.card:hover h3{color:var(--accent)}
 .emptynote{margin-top:34px;color:var(--muted);font-size:16.5px}
 
 /* keyboard users get the same affordance the mouse does */
-.topic:focus-visible,.feature:focus-visible,.rows a:focus-visible,
+.topic:focus-visible,.postcard:focus-visible,.rows a:focus-visible,
 .pager a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
 @media(max-width:760px){
-  .feature{grid-template-columns:1fr}
-  .feature-img{min-height:0;aspect-ratio:16/9}
+  .postcard{grid-template-columns:1fr}
+  .postcard-img{min-height:0;aspect-ratio:16/9}
 }
 @media(prefers-reduced-motion:reduce){
-  .topic,.feature,.pager a,.go-arrow,.feature-img img{transition:none}
-  .feature:hover .feature-img img{transform:none}
+  .topic,.postcard,.pager a,.go-arrow,.postcard-img img{transition:none}
+  .postcard:hover .postcard-img img{transform:none}
 }

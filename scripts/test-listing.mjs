@@ -76,10 +76,10 @@ const count = (html, re) => (html.match(re) || []).length
 
 // Page 1: one lead card plus the rest of the slice as index rows.
 const rows = (html) => count(html, /<li><a href/g)
-check('page 1 lead cards', count(p1, /class="feature"/g), 1)
+check('page 1 lead cards', count(p1, /class="postcard"/g), 1)
 check('page 1 index rows', rows(p1), PER_PAGE - 1)
 // Deeper pages are all rows, no lead.
-check('page 2 lead cards', count(p2, /class="feature"/g), 0)
+check('page 2 lead cards', count(p2, /class="postcard"/g), 0)
 check('page 2 index rows', rows(p2), PER_PAGE)
 check('page 3 index rows (remainder)', rows(p3), 23 - 2 * PER_PAGE)
 
@@ -113,7 +113,7 @@ check('topic chips rendered', count(p1, /class="topic[ "]/g), CATS.length + 1)
 check('Everything chip is active on page 1', /class="topic on"[^>]*>Everything/.test(p1), true)
 
 const topicPage = render(1, CATS[0])
-check('topic page has no lead card', count(topicPage, /class="feature"/g), 0)
+check('topic page has no lead card', count(topicPage, /class="postcard"/g), 0)
 check('topic page lists only that topic', rows(topicPage), 8)
 check('topic page marks its own chip', /class="topic on"[^>]*>Hiring/.test(topicPage), true)
 // The masthead is deliberately identical on every listing page: varying it made

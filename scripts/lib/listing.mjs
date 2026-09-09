@@ -58,13 +58,13 @@ function featureCard(post, urlFor, ctx) {
     // edge has to sit on a wrapper rather than inside the link.
     `  <div class="leadcard">\n` +
     `    <span class="tape" aria-hidden="true"></span>\n` +
-    `  <a class="feature" href="${ctx.postHref(post.slug)}">\n` +
-    `    <div class="feature-img">${cardImage(post, urlFor, ctx)}</div>\n` +
-    `    <div class="feature-body">\n` +
+    `  <a class="postcard" href="${ctx.postHref(post.slug)}">\n` +
+    `    <div class="postcard-img">${cardImage(post, urlFor, ctx)}</div>\n` +
+    `    <div class="postcard-body">\n` +
     `      <span class="eyebrow">${label}${cat ? ` &middot; ${esc(cat.title)}` : ''}</span>\n` +
     `      <h2>${esc(post.title)}</h2>\n` +
     `      <p>${esc(summaryOf(post))}</p>\n` +
-    `      <p class="feature-meta">${esc((post.author && post.author.name) || 'AgentR')} &middot; ` +
+    `      <p class="postcard-meta">${esc((post.author && post.author.name) || 'AgentR')} &middot; ` +
     `<time datetime="${post.publishedAt.slice(0, 10)}">${humanDate(post.publishedAt)}</time>` +
     ` &middot; ${readingTime(post.body)} min read &nbsp;` +
     `<span class="go-arrow">&#8594;</span></p>\n` +
