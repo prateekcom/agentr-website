@@ -305,6 +305,10 @@ footer{border-top:1px solid var(--line);margin-top:clamp(56px,8vh,96px);backgrou
    scrolling. Anchored to the button's right edge instead. Process is centred
    because it sits mid-bar and has room on both sides. */
 .navdrop-p.end{left:auto;right:0;margin-left:0;margin-right:-24px}
+/* Log in is a short menu, not a mega-menu: two destinations and no numbered
+   cards, so the 600px two-column panel would be mostly empty space. */
+.navdrop-p.slim{width:min(268px,86vw)}
+.navdrop-p.slim .dd-grid{grid-template-columns:1fr;gap:2px}
 .navdrop-p::before{content:"";position:absolute;left:0;right:0;top:-18px;height:18px}
 .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
 .dd-grid a{display:flex;gap:14px;align-items:flex-start;padding:12px;border-radius:13px;
