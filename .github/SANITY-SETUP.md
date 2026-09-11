@@ -51,7 +51,7 @@ Then in Sanity → **Manage → API → Webhooks → Create webhook**:
 | Field | Value |
 |---|---|
 | Name | `Rebuild site` |
-| URL | `https://api.github.com/repos/<owner>/<repo>/dispatches` |
+| URL | `https://api.github.com/repos/<owner>/<repo>/dispatches` (production: `Vibencode-Solutions/agentr-landing-page`) |
 | Dataset | `production` |
 | Trigger on | Create, Update, Delete |
 | Filter | `_type == "post"` |
@@ -84,15 +84,12 @@ Go to https://agentr.sanity.studio → **Blog posts** → Create.
 
 Required: Title, URL (click Generate), Standfirst, Author, Publish date, Body.
 
-**Leave the banner image empty.** The illustration is the default, not a
-fallback: the build picks a motif from the library by reading the title, so a
-post is illustrated the moment it is published and nobody has to make a picture.
-Uploading a banner *overrides* that and takes the post out of the house style —
-worth doing only when the post genuinely needs a specific photograph or chart.
-
-Because the match is read off the title, **the title is what chooses the
-picture**. Rewriting it can change the drawing. `.github/ILLUSTRATION-GUIDE.md`
-has the full matching order and the list of motifs.
+**Every post carries its own drawing, uploaded with the post.** The build does
+not choose or generate one any more. Make it with the `agentr-illustrations`
+toolkit and attach both files it produces: `<slug>.svg` as the **Banner image**
+and `<slug>-social.jpg` under **Search engine overrides → Social share image**.
+A post without an image still publishes, with no picture; the build prints its
+slug. `.github/ILLUSTRATION-GUIDE.md` has the details.
 
 - A **future publish date** keeps the post off the site until that date, but only
   a build after that date will pick it up.
@@ -105,33 +102,47 @@ has the full matching order and the list of motifs.
 
 ## Running it locally
 
+Needs Node 22.12 or newer (`nvm use 22`).
+
 ```bash
-npm install
+npm ci --omit=dev
 npm run build:blog     # renders /blog/ from Sanity
 python -m http.server 8000
 ```
 
 Then open http://localhost:8000/blog/.
 
+Or, to see exactly what the deploy would put in the bucket, served the way
+CloudFront serves it (directory URLs, real 404 status, content types):
+
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
+
+Then open http://localhost:8080/blog/. The image runs the same build with the
+same S3 exclude list, so `scripts/`, `package.json`, `docker/` and
+`irrelevent/` are not reachable, as in production.
+
 The build reads **published** posts only, so a draft will not appear locally.
+Set `INCLUDE_SCHEDULED=1` to preview a future-dated post; never in the deploy.
 
 ---
 
 ## How the generated pages stay on-brand
 
 `scripts/lib/template.mjs` lifts the nav, mobile menu, footer, Google Tag Manager
-snippet, favicons and font links out of pages that already ship
-(`views/when-everyone-is-using-bots/index.html` for post pages,
-`about/index.html` for the index) rather than keeping a second copy. Editing the
-nav in those pages updates the blog on the next build.
+snippet, favicons and font links out of a page that already ships rather than
+keeping a second copy. It tries `about/index.html` first, then `pricing/`,
+`contact/`, `for-candidates/` and `platform-security/`; the first that parses
+wins, and every other depth (`/blog/<slug>/`, `/blog/page/2/`) is derived from
+it. Editing the nav in those pages updates the blog on the next build.
 
 Two consequences worth knowing:
 
-- Those two files are load-bearing. Renaming or deleting either **fails the
-  build** with a clear message rather than shipping a broken page.
-- Asset paths on this site are relative. `/blog/<slug>/` is two levels deep, the
-  same as `/views/<slug>/`, and `/blog/` is one level deep, the same as
-  `/about/`. That is why those specific files are the sources.
+- If none of those five pages can be parsed the build **fails with a clear
+  message** rather than shipping a broken page.
+- Asset paths on this site are relative, so the source page must be one level
+  deep, like `/about/`. Do not move the sources to a different depth.
 
 ## Things that will bite
 

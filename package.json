@@ -16,8 +16,5 @@
   },
   "engines": {
     "node": ">=22.12"
-  },
-  "devDependencies": {
-    "@portabletext/markdown": "^2.0.0"
   }
 }

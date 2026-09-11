@@ -1,0 +1,9 @@
+.git
+node_modules
+irrelevent
+docker/*
+!docker/nginx.conf
+.claude
+.agents
+_designpreview
+blogs-import.ndjson

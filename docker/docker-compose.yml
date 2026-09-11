@@ -1,0 +1,14 @@
+# From the repository root:
+#   docker compose -f docker/docker-compose.yml up --build
+# then open http://localhost:8080/blog/
+services:
+  site:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        # Uncomment to preview scheduled (future-dated) posts locally.
+        # INCLUDE_SCHEDULED: "1"
+        SANITY_API_READ_TOKEN: ${SANITY_API_READ_TOKEN:-}
+    ports:
+      - "8080:80"

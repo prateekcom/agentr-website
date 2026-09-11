@@ -83,6 +83,8 @@ jobs:
           --exclude "package.json" \
           --exclude "package-lock.json" \
           --exclude "skills-lock.json" \
+          --exclude "irrelevent/*" \
+          --exclude "docker/*" \
           --exclude ".gitignore" \
           --exclude ".DS_Store"
 
@@ -114,7 +116,7 @@ jobs:
     # keeps the whole thing inside the deploy.
     - name: Publish directory URLs
       run: |
-        find . -name index.html -not -path "./.git/*" -not -path "./.github/*" | while read -r f; do
+        find . -name index.html -not -path "./.git/*" -not -path "./.github/*" -not -path "./node_modules/*" -not -path "./irrelevent/*" -not -path "./docker/*" | while read -r f; do
           key="${f#./}"
           dir="${key%index.html}"
           if [ -n "$dir" ]; then
