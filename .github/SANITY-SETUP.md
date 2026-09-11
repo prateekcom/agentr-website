@@ -38,26 +38,39 @@ npm run deploy            # publishes to agentr.sanity.studio
 
 ### 2. Let Sanity trigger the deploy
 
-Create a GitHub token that may only start workflows:
+Sanity's webhook calls GitHub's `workflow_dispatch` endpoint, which starts the
+same "Deploy" workflow the "Run workflow" button does. GitHub documents the
+permission that endpoint needs as **"Actions" repository permissions (write)**
+and nothing else, so the token cannot push code. (The `repository_dispatch`
+trigger also present in `deploy.yml` would need Contents: write instead, which
+is why it is not used.)
 
-1. GitHub → Settings → Developer settings → **Fine-grained personal access token**
-2. Repository access: this repository only
-3. Permissions: **Contents: Read and write** (this is what `repository_dispatch`
-   requires; it is the narrowest permission that works)
-4. Copy the token — it is shown once
+Create a fine-grained GitHub token that may only start workflows:
 
-Then in Sanity → **Manage → API → Webhooks → Create webhook**:
+1. GitHub → profile picture → Settings → Developer settings → Personal access
+   tokens → **Fine-grained tokens** → Generate new token
+2. Resource owner: the organisation that owns the production repo
+3. Repository access: **Only select repositories** → the production repo
+4. Repository permissions: **Actions: Read and write**. Nothing else.
+5. Copy the token — it is shown once. If the organisation requires approval for
+   fine-grained tokens, it stays "pending" until an owner approves it.
+
+Then in Sanity → **Manage → API → Webhooks → Create webhook** (needs the
+Administrator or Developer role on the project):
 
 | Field | Value |
 |---|---|
 | Name | `Rebuild site` |
-| URL | `https://api.github.com/repos/<owner>/<repo>/dispatches` (production: `Vibencode-Solutions/agentr-landing-page`) |
+| URL | `https://api.github.com/repos/<owner>/<repo>/actions/workflows/deploy.yml/dispatches` (production: `Vibencode-Solutions/agentr-landing-page`) |
 | Dataset | `production` |
 | Trigger on | Create, Update, Delete |
 | Filter | `_type == "post"` |
+| Projection | `{"ref": "main"}` |
 | HTTP method | `POST` |
 | API version | `v2021-03-25` |
-| Body | `{"event_type": "sanity-publish"}` |
+
+The projection *is* the request body: GitHub requires `ref`, the branch to run
+the workflow on. Without it GitHub answers 422 and nothing runs.
 
 Headers:
 
@@ -67,8 +80,13 @@ Accept: application/vnd.github+json
 Content-Type: application/json
 ```
 
-The token grants write access to this repository — treat it as a password. It
-belongs only in Sanity's webhook settings, never in a commit.
+The token belongs only in Sanity's webhook settings, never in a commit. It
+expires on the date chosen at creation, and the webhook stops working with it.
+
+GitHub only runs the workflow if `deploy.yml` with its `workflow_dispatch`
+trigger exists on the default branch, so the webhook is inert until the blog
+branch is merged. Test it afterwards: republish any post and a "Deploy" run
+should appear in Actions within seconds.
 
 ### 3. Private dataset (only if you make one)
 
